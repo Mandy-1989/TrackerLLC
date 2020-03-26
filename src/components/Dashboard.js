@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
@@ -8,6 +8,10 @@ class Dashboard extends Component {
 
     componentDidMount() {
         this.props.fetchCovid_19List()
+    }
+
+    onPress = () => {
+        this.props.navigation.navigate('MapView')
     }
 
     render() {
@@ -20,7 +24,9 @@ class Dashboard extends Component {
                 console.log("Response:" + JSON.stringify(this.props.covidInfo))
                 return (
                     <View style={styles.viewParent}>
-                        <Text>Dashboard</Text>
+                        <TouchableOpacity onPress={() => this.onPress()}>
+                            <Text>Dashboard</Text>
+                        </TouchableOpacity>
                     </View>
                 )
         }

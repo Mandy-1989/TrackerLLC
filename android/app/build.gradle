@@ -181,6 +181,9 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.google.android.gms:play-services-base:17.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+//    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
