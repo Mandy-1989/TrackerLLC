@@ -7,6 +7,7 @@ import configureStore from './redux/Store/configureStore';
 
 import SplashScreen from "./components/Splash";
 import DashboardScreen from "./components/Dashboard";
+import MapViewScreen from "./components/MapViewScreen";
 
 const store = configureStore()
 
@@ -28,6 +29,13 @@ const AppNavigator = createStackNavigator({
     },
     Dashboard: {
         screen: DashboardScreen,
+        navigationOptions: {
+            title: 'Home',
+            header: null //this will hide the header
+        },
+    },
+    MapView: {
+        screen: MapViewScreen,
         navigationOptions: {
             title: 'Home',
             header: null //this will hide the header

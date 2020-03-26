@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { View, Text,TouchableOpacity, ActivityIndicator, StyleSheet,Image} from 'react-native';
+=======
+import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
+>>>>>>> 6e0768846232b6cf6e71de91038a915ad75a2999
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
@@ -14,7 +18,11 @@ class Dashboard extends Component {
     this.props.fetchCovid_19List();
     }
 
-    
+
+    onPress = () => {
+        this.props.navigation.navigate('MapView')
+    }
+
     render() {
         console.log(this.props.covidInfo.confirmed)
        let DATA = [
@@ -73,7 +81,7 @@ class Dashboard extends Component {
                     })}
                     
             </View>
-                )
+                            )
         }
     }
 }
