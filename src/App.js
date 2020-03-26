@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
+
+import { Provider } from 'react-redux';
+import configureStore from './redux/Store/configureStore';
+
 import SplashScreen from "./components/Splash";
 import DashboardScreen from "./components/Dashboard";
 
+const store = configureStore()
+
 export default class App extends Component {
     render() {
-        return <AppContainer />
+        return <Provider store={store}>
+            <AppContainer />
+        </Provider>
     }
 }
 
