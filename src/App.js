@@ -9,6 +9,8 @@ import SplashScreen from "./components/Splash";
 import DashboardScreen from "./components/Dashboard";
 import MapViewScreen from "./components/MapViewScreen";
 
+import CountryListScreen from "./components/CountryListScreen";
+
 const store = configureStore()
 
 export default class App extends Component {
@@ -36,6 +38,13 @@ const AppNavigator = createStackNavigator({
     },
     MapView: {
         screen: MapViewScreen,
+        navigationOptions: {
+            title: 'Home',
+            header: null //this will hide the header
+        },
+    },
+    CountryListScreen: {
+        screen: CountryListScreen,
         navigationOptions: {
             title: 'Home',
             header: null //this will hide the header

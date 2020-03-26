@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { View, Text,TouchableOpacity, ActivityIndicator, StyleSheet,Image} from 'react-native';
-=======
-import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
->>>>>>> 6e0768846232b6cf6e71de91038a915ad75a2999
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
 import AppImages from '../assets/images';
 import LinearGradient from 'react-native-linear-gradient';
-
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 class Dashboard extends Component {
@@ -19,31 +15,33 @@ class Dashboard extends Component {
     }
 
 
-    onPress = () => {
-        this.props.navigation.navigate('MapView')
-    }
-
+  
     render() {
-        console.log(this.props.covidInfo.confirmed)
+
+        let confirmed = JSON.stringify(this.props.covidInfo.covid.confirmed);
+        let recovered = JSON.stringify(this.props.covidInfo.covid.recovered);
+        let deaths = JSON.stringify(this.props.covidInfo.covid.deaths)
+       
        let DATA = [
             {
                 id:1,
                 headerText:'CONFIRMED CASES',
-                subText: this.props.covidInfo.confirmed,
+                subText:confirmed ? confirmed : null,
                 imageIcon:AppImages.earth_image,
                 colorOne:'#EA674B',
                 colorTwo:'#FF0202',   
             },
             {
+                id:2,
                 headerText:'RECOVERED CASES',
-                subText: this.props.covidInfo.recovered,
+                subText: recovered ? recovered : null,
                 colorOne:'#3890DA',
                 colorTwo:'#085BB8'
             },
             {
                 id:3,
                 headerText:'TOTAL DEATHS',
-                subText: this.props.covidInfo.deaths,
+                subText: deaths ? deaths : null,
                 colorOne:'#805CEC',
                 colorTwo:'#4D1EB5'
             }
@@ -54,7 +52,7 @@ class Dashboard extends Component {
                     <ActivityIndicator size={'large'} />
                 </View>
             case false:
-                console.log("Response:" + JSON.stringify(this.props.covidInfo))
+                console.log("Response:" + JSON.stringify(this.props.covidInfo.covid.confirmed))
                 return (
                     <View style={styles.viewParent} >
                         <View style={styles.firstContainer}> 
@@ -67,21 +65,25 @@ class Dashboard extends Component {
                     {DATA.map(item=>{
                         return(
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={[ item.colorOne, item.colorTwo]} style={[styles.infoCard]} >
-                            <TouchableOpacity style={{flexDirection:"row"}}> 
+                            <TouchableOpacity style={{flexDirection:"row"}} onPress={()=> this.props.navigation.navigate('CountryListScreen',{name :item.headerText ,total : item.subText})} > 
                                     <View style={styles.textContainer}> 
                                         <Text style={styles.headerCardText}>{item.headerText}</Text>
                                         <Text style={styles.subText} >{item.subText}</Text>
                                     </View>
-                                    <View style={{flex:1.5,alignItems:'flex-end',justifyContent:'center'}}>
-                                        <Image source={item.imageIcon} style={{height:80, width:80 }}/>
-                                    </View>
+                                    
+                                    <TouchableOpacity style={{flex:1.5,alignItems:'flex-end' }} onPress={()=>this.props.navigation.navigate('MapView')}  >
+                                        {/* <Image source={item.imageIcon} style={{height:80, width:80 }}/> */}
+                                        {/* <Icon name={'marker-on'} size={20} /> */}
+                                        <Image source={AppImages.earth_image} style={{height:40, width:40,paddingHorizontal:5,marginVertical:20 }}/>
+
+                                    </TouchableOpacity>
                                 </TouchableOpacity> 
                         </LinearGradient>    
                             )
-                    })}
-                    
+                    })}                    
             </View>
-                            )
+           
+            )
         }
     }
 }
@@ -105,14 +107,15 @@ viewParent: {
     // justifyContent: 'center',
     backgroundColor: '#ffff',
     // marginHorizontal:10,
+    marginBottom:30
 },
       
 firstContainer:{
     marginHorizontal:10,
-    marginTop:60,
+    marginTop:80,
     flex:0.1,
     flexDirection:'row',
-    marginBottom:30,
+    marginBottom:10,
 
 },
 headerText:{
@@ -125,7 +128,7 @@ infoCard:{
   paddingHorizontal:15,
   borderRadius:10,
   alignItems:"center",
-  flex:0.2,
+  flex:0.3,
   shadowColor: '#939393',
       shadowOffset: {
         width: 0,
@@ -144,7 +147,7 @@ headerCardText:{
 },
 subText:{
   fontSize:55,
-  paddingTop:20,
+  paddingTop:30,
   paddingLeft:10,
   color:'#ffff'
 }
