@@ -8,8 +8,8 @@ import configureStore from './redux/Store/configureStore';
 import SplashScreen from "./components/Splash";
 import DashboardScreen from "./components/Dashboard";
 import MapViewScreen from "./components/MapViewScreen";
-
 import CountryListScreen from "./components/CountryListScreen";
+import WebLinkScreen from "./components/WebLink";
 
 const store = configureStore()
 
@@ -26,29 +26,36 @@ const AppNavigator = createStackNavigator({
         screen: SplashScreen,
         navigationOptions: {
             title: 'Home',
-            header: null //this will hide the header
+            headerShown: false //this will hide the header
         },
     },
     Dashboard: {
         screen: DashboardScreen,
         navigationOptions: {
             title: 'Home',
-            header: null //this will hide the header
+            headerShown: false //this will hide the header
         },
     },
     MapView: {
         screen: MapViewScreen,
         navigationOptions: {
             title: 'Home',
-            header: null //this will hide the header
+            headerShown: false //this will hide the header
         },
     },
     CountryListScreen: {
         screen: CountryListScreen,
         navigationOptions: {
             title: 'Home',
-            header: null //this will hide the header
+            headerShown: false //this will hide the header
         },
+    },
+    WebLink: {
+        screen: WebLinkScreen,
+        navigationOptions: {
+            title: 'Home',
+            headerShown: false //this will hide the header
+        }
     }
 },
     {

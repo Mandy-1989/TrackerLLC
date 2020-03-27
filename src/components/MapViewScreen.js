@@ -16,45 +16,50 @@ class MapViewScreen extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchCovidCountry_19List()
+        this.props.fetchCovidCountry_19List(1);
+    }
+
+    setMarkerPosition = (item) => {
+        const assetLocations = {
+            latitude: parseFloat(item.lat),
+            longitude: parseFloat(item.long)
+        };
+
+        return (
+            <Marker coordinate={assetLocations}
+                image={require('../assets/images/pin.png')}
+            />
+        )
     }
 
     render() {
-        switch (this.props.covidInfo.isFetching) {
+        const { covidInfo, isLoading } = this.props;
+        switch (isLoading) {
             case true:
                 return <View style={styles.viewParent}>
                     <ActivityIndicator size={'large'} />
                 </View>
             case false:
-                console.log("Response:" + JSON.stringify(this.props.covidInfo.covidCountry))
-                if (this.props.covidInfo.hasOwnProperty('data')) {
-                    this.setState({
-                        country: this.props.covidInfo.covidCountry.data.country
-                    })
-                    console.log("Length:" + this.state.country.length)
+                if (covidInfo.length > 0) {
+                    if (this.state.country.length == 0) {
+                        this.setState({
+                            country: covidInfo
+                        })
+                    }
                 }
 
                 return (
                     <View style={styles.container}>
-                        <MapView
-                            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-                            style={styles.map}
-                        // region={{
-                        //     latitude: 37.78825,
-                        //     longitude: -122.4324,
-                        //     latitudeDelta: 0.015,
-                        //     longitudeDelta: 0.0121,
-                        // }}
-                        >
-
-                            {this.state.country.map(marker => (
-                                <Marker
-                                    coordinate={marker.lat + "," + marker.long}
-                                    title={marker.name}
-                                    description={marker.state}
-                                />
+                        <MapView provider={PROVIDER_GOOGLE}
+                            mapType={'terrain'}
+                            zoomEnabled={true}
+                            zoomTapEnabled={true}
+                            zoomControlEnabled={true}
+                            minZoomLevel={3}
+                            style={styles.map}>
+                            {this.state.country.map(item => (
+                                this.setMarkerPosition(item)
                             ))}
-
                         </MapView>
                     </View>
                 )
@@ -64,7 +69,8 @@ class MapViewScreen extends Component {
 
 function mapStateToProps(state) {
     return {
-        covidInfo: state.covidCountry
+        covidInfo: state.covidCountry.covidCountry,
+        isLoading: state.covidCountry.isFetching,
     }
 }
 
@@ -75,10 +81,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 const styles = StyleSheet.create({
+    viewParent: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     container: {
         ...StyleSheet.absoluteFillObject,
-        // height: 400,
-        // width: 400,
         justifyContent: 'flex-end',
         alignItems: 'center',
     },

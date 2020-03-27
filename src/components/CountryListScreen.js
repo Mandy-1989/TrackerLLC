@@ -4,106 +4,77 @@ import AppImages from '../assets/images';
 import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+let covidName;
+let total;
+
 class CountryListScreen extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
         }
+
+        covidName = this.props.navigation.getParam('name')
+        total = this.props.navigation.getParam('total')
     }
 
     componentDidMount() {
-        this.props.fetchCovidCountry_19List();
+        this.props.fetchCovidCountry_19List(2);
     }
-
-    render() {
-        const covidInfo = this.props.navigation.getParam('name')
-        const total = this.props.navigation.getParam('total')
-        console.log({ covidInfo })
-        let data;
-
-        if (this.props.covidCountry !== undefined && this.props.covidCountry.covidCountry !== undefined && this.props.covidCountry.covidCountry.data !== undefined) {
-            data = this.props.covidCountry.covidCountry.data.country;
-        }
-
-
+    renderCountryItem = ({ item, index }) => {
+        let count = covidName === 'CONFIRMED CASES' ? item.confirmed : (covidName === 'RECOVERED CASES' ? item.recovered : item.deaths)
 
         return (
-            <View style={{ flex: 1, backgroundColor: 'white' }}>
+            <View style={styles.flatlistView}>
+                <Text style={[styles.textStyle, { color: 'red' }]}>{count}</Text>
+                <Text style={styles.textStyleTwo}>{item.name}</Text>
+            </View>
+        )
+    }
 
-                <TouchableOpacity style={{ marginTop: 50, marginHorizontal: 20 }} onPress={() => this.props.navigation.goBack()}>
-                    <Text style={{ fontSize: 20 }}>Back</Text>
+    renderSeparator = () => (
+        <View style={{
+            backgroundColor: "#C4C4C4",
+            height: 0.5
+        }} />
+    );
+
+    render() {
+        let data;
+        const { covidInfo, isLoading } = this.props;
+
+        if (this.props.covidInfo !== undefined && this.props.covidInfo !== undefined && this.props.covidInfo !== undefined) {
+            data = covidInfo;
+        }
+
+        return (
+            <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
+                <TouchableOpacity style={{ padding: 10 }} onPress={() => this.props.navigation.goBack()}>
+                    <Ionicons name={"ios-arrow-back"} size={24} color={'black'} />
                 </TouchableOpacity>
-                <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 25 }}>
-                    <Text style={{ fontSize: 28 }}>
-                        {covidInfo === 'CONFIRMED CASES' ? 'Total Confirmed' : null}
-                    </Text><Text style={{ fontSize: 28 }}>
-                        {covidInfo === 'RECOVERED CASES' ? 'Total Recovered' : null}
-                    </Text>
-                    <Text style={{ fontSize: 28 }}>
-                        {covidInfo === 'TOTAL DEATHS' ? 'Total Deaths' : null}
-                    </Text>
-                    <Text style={{ fontSize: 40, marginTop: 5, color: 'red' }}>
-                        {total}
-                    </Text>
+
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 28, fontFamily: 'FiraSans-Medium' }}> {covidName === 'CONFIRMED CASES' ? 'Total Confirmed:' : (covidName === 'RECOVERED CASES' ? 'Total Recovered:' : 'Total Deaths:')}</Text>
+                    <Text style={{ fontSize: 40, color: 'red', fontFamily: 'FiraSans-Bold' }}>{total}</Text>
                 </View>
 
-                {!this.props.covidCountry.isFetching ?
-
+                {!isLoading ?
                     <View style={{ marginBottom: 50 }}>
                         <FlatList
+                            keyExtractor={(item, index) => item.name}
                             data={data && data.length !== 0 && data !== undefined ? data : null}
-                            renderItem={({ item }) => {
-                                console.log({ item })
-                                if (covidInfo === 'RECOVERED CASES') {
-                                    return (
-                                        <View style={styles.flatlistView}>
-                                            <View style={{ flex: 0.7 }}>
-                                                <Text style={[styles.textStyle, { color: 'red' }]}>{item.recovered}</Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flex: 2 }}>
-                                                <Text style={styles.textStyleTwo}>{item.name}</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                } else if (covidInfo === 'CONFIRMED CASES') {
-                                    return (
-                                        <View style={styles.flatlistView}>
-                                        <View style={{ flex: 0.7 }}>
-                                            <Text style={[styles.textStyle, { color: 'red' }]}>{item.confirmed}</Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flex: 2 }}>
-                                            <Text style={styles.textStyleTwo}>{item.name}</Text>
-                                        </View>
-                                    </View>
-                                    )
-                                } else {
-                                    return (
-                                        <View style={styles.flatlistView}>
-                                            <View style={{ flex: 0.7 }}>
-                                                <Text style={[styles.textStyle, { color: 'red' }]}>{item.deaths}</Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', flex: 2 }}>
-                                                <Text style={styles.textStyleTwo}>{item.name}</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-
-                            }}
+                            renderItem={(index) => this.renderCountryItem(index)}
+                            ItemSeparatorComponent={this.renderSeparator}
                         />
-                        <View style={{ height: 100 }} />
                     </View>
-                    :
-                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator size={'large'} />
-                    </View>
-
-
+                    : null
+                    // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    //     <ActivityIndicator size={'large'} />
+                    // </View>
                 }
-
             </View>
-
         )
     }
 }
@@ -111,35 +82,30 @@ const styles = StyleSheet.create({
     viewParent: {
         flex: 1,
         alignItems: 'center',
-        // justifyContent: 'center',
-        backgroundColor: '#ffff',
-        // marginHorizontal:10,
+        backgroundColor: '#ffff'
     },
     flatlistView: {
-        borderBottomWidth: .5,
         flexDirection: 'row',
-        marginVertical: 5,
-        alignItems: "center"
+        alignItems: 'center',
+        marginHorizontal: 10
     },
     textStyle: {
-        fontSize: 30,
-        paddingHorizontal: 5,
-        paddingLeft: 25,
-        paddingVertical: 5,
-        textAlign: 'justify'
+        fontSize: 20,
+        width: 80,
+        textAlign: 'justify',
+        fontFamily: 'FiraSans-Medium'
     },
     textStyleTwo: {
-        fontSize: 26,
-        paddingHorizontal: 5,
-        paddingLeft: 30,
+        fontSize: 18,
         paddingVertical: 5,
-        textAlign: 'justify'
+        fontFamily: 'FiraSans-Medium'
     }
 })
 
 function mapStateToProps(state) {
     return {
-        covidCountry: state.covidCountry
+        covidInfo: state.covidCountry.covidCountry,
+        isLoading: state.covidCountry.isFetching,
     }
 }
 

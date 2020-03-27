@@ -5,7 +5,7 @@ import {
 } from '../../constants/APIConstants';
 
 const initialState = {
-    covidCountry: {},
+    covidCountry: [],
     isFetching: false,
     error: false
 }
