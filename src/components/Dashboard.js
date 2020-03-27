@@ -18,6 +18,15 @@ class Dashboard extends Component {
         this.props.navigation.navigate('WebLink', { data: clickType })
     }
 
+    setMapIcon = (item) => {
+        // if (item.headerText == 'CONFIRMED CASES') {
+        //     return <TouchableOpacity style={{ position: 'absolute', right: 0, marginRight: 10, alignItems: 'center' }}
+        //         onPress={() => this.props.navigation.navigate('MapViewScreen')}  >
+        //         <Image source={AppImages.earth_image} style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
+        //     </TouchableOpacity>
+        // }
+    }
+
     render() {
         let confirmed = JSON.stringify(this.props.covidInfo.covid.confirmed);
         let recovered = JSON.stringify(this.props.covidInfo.covid.recovered);
@@ -27,7 +36,7 @@ class Dashboard extends Component {
             {
                 id: 1,
                 headerText: 'CONFIRMED CASES',
-                subText: confirmed ? confirmed : null,
+                subText: confirmed ? confirmed.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null,
                 imageIcon: AppImages.earth_image,
                 colorOne: '#EA674B',
                 colorTwo: '#FF0202',
@@ -35,14 +44,14 @@ class Dashboard extends Component {
             {
                 id: 2,
                 headerText: 'RECOVERED CASES',
-                subText: recovered ? recovered : null,
+                subText: recovered ? recovered.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null,
                 colorOne: '#3890DA',
                 colorTwo: '#085BB8'
             },
             {
                 id: 3,
                 headerText: 'TOTAL DEATHS',
-                subText: deaths ? deaths : null,
+                subText: deaths ? deaths.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null,
                 colorOne: '#805CEC',
                 colorTwo: '#4D1EB5'
             }
@@ -69,21 +78,18 @@ class Dashboard extends Component {
                                         end={{ x: 1, y: 0 }}
                                         colors={[item.colorOne, item.colorTwo]}
                                         style={[styles.infoCard]} >
-                                        <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => this.props.navigation.navigate('CountryListScreen', { name: item.headerText, total: item.subText })} >
+                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('CountryListScreen', { name: item.headerText, total: item.subText })} >
                                             <View style={styles.textContainer}>
                                                 <Text style={styles.headerCardText}>{item.headerText}</Text>
                                                 <Text style={styles.subText} >{item.subText}</Text>
                                             </View>
-
-                                            <TouchableOpacity style={{ flex: 1.5, alignItems: 'flex-end' }} onPress={() => this.props.navigation.navigate('MapView')}  >
-                                                <Image source={AppImages.earth_image} style={{ height: 40, width: 40, paddingHorizontal: 5, marginVertical: 20 }} />
-                                            </TouchableOpacity>
                                         </TouchableOpacity>
+                                        {this.setMapIcon(item)}
                                     </LinearGradient>
                                 )
                             })}
 
-                            <View style={styles.viewBottom}>
+                            {/* <View style={styles.viewBottom}>
                                 <TouchableOpacity style={styles.viewButton} onPress={() => this.onClick(1)}>
                                     <Text style={styles.txtButton}>FAQ</Text>
                                 </TouchableOpacity>
@@ -93,7 +99,7 @@ class Dashboard extends Component {
                                 <TouchableOpacity style={styles.viewButton} onPress={() => this.onClick(3)}>
                                     <Text style={styles.txtButton}>News</Text>
                                 </TouchableOpacity>
-                            </View>
+                            </View> */}
                         </View>
                     </View>
                 )
@@ -136,7 +142,6 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         paddingHorizontal: 15,
         borderRadius: 10,
-        alignItems: "center",
         flex: 0.3,
         shadowColor: '#939393',
         shadowOffset: {

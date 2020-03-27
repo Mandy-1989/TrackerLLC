@@ -6,10 +6,10 @@ import { Provider } from 'react-redux';
 import configureStore from './redux/Store/configureStore';
 
 import SplashScreen from "./components/Splash";
-import DashboardScreen from "./components/Dashboard";
-import MapViewScreen from "./components/MapViewScreen";
+import MapViewScreen from "./components/MapView";
 import CountryListScreen from "./components/CountryListScreen";
-import WebLinkScreen from "./components/WebLink";
+import TabNavigatorScreen from "./components/TabNavigator";
+
 
 const store = configureStore()
 
@@ -29,14 +29,22 @@ const AppNavigator = createStackNavigator({
             headerShown: false //this will hide the header
         },
     },
-    Dashboard: {
-        screen: DashboardScreen,
+    TabNavigator: {
+        screen: TabNavigatorScreen,
         navigationOptions: {
             title: 'Home',
             headerShown: false //this will hide the header
         },
     },
-    MapView: {
+
+    // Dashboard: {
+    //     screen: DashboardScreen,
+    //     navigationOptions: {
+    //         title: 'Home',
+    //         headerShown: false //this will hide the header
+    //     },
+    // },
+    MapViewScreen: {
         screen: MapViewScreen,
         navigationOptions: {
             title: 'Home',
@@ -50,13 +58,13 @@ const AppNavigator = createStackNavigator({
             headerShown: false //this will hide the header
         },
     },
-    WebLink: {
-        screen: WebLinkScreen,
-        navigationOptions: {
-            title: 'Home',
-            headerShown: false //this will hide the header
-        }
-    }
+    // WebLink: {
+    //     screen: WebLinkScreen,
+    //     navigationOptions: {
+    //         title: 'Home',
+    //         headerShown: false //this will hide the header
+    //     }
+    // }
 },
     {
         initialRouteName: 'Splash',

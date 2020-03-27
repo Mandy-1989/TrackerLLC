@@ -5,7 +5,7 @@ export default class Splash extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.navigation.replace('Dashboard')
+            this.props.navigation.replace('TabNavigator')
         }, 3000)
     }
     render() {

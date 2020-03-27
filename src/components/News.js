@@ -3,12 +3,9 @@ import { View, StyleSheet, Text, Image, ActivityIndicator, SafeAreaView } from '
 import AppImages from '../assets/images';
 import { WebView } from 'react-native-webview';
 
-let clickType;
-
 export default class WebLink extends Component {
     constructor(props) {
         super(props)
-        clickType = this.props.navigation.state.params.data
 
         this.state = {
             isShowIndicator: true
@@ -28,21 +25,6 @@ export default class WebLink extends Component {
     }
 
     render() {
-        let webURL;
-        switch (clickType) {
-            case 1:
-                webURL = "https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html";
-                break;
-            case 2:
-                webURL = "https://rxmedizin.com/scheduling";
-                break;
-            case 3:
-                webURL = "https://rxmedizin.com/news";
-                break;
-        }
-
-        console.log("webURL:" + webURL)
-
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
                 <View style={styles.firstContainer}>
@@ -52,7 +34,7 @@ export default class WebLink extends Component {
                     </Text>
                 </View>
                 {this.showIndicator()}
-                <WebView source={{ uri: webURL }} onLoad={() => this.hideLoading()} />
+                <WebView source={{ uri: 'https://rxmedizin.com/news' }} onLoad={() => this.hideLoading()} />
             </SafeAreaView>
         )
     }
