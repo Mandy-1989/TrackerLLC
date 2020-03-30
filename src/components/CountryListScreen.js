@@ -5,6 +5,7 @@ import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import StyleConfig from '../assets/StyleConfig'
 
 let covidName;
 let total;
@@ -51,11 +52,11 @@ class CountryListScreen extends Component {
 
         return (
             <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
-                <TouchableOpacity style={{ padding: 10 }} onPress={() => this.props.navigation.goBack()}>
-                    <Ionicons name={"ios-arrow-back"} size={24} color={'black'} />
+                <TouchableOpacity style={{ padding: 10,marginTop:StyleConfig.countPixelRatio(30) }} onPress={() => this.props.navigation.goBack()}>
+                    <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
                 </TouchableOpacity>
 
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center',marginBottom:StyleConfig.countPixelRatio(10) }}>
                     <Text style={{ fontSize: 28, fontFamily: 'FiraSans-Medium' }}> {covidName === 'CONFIRMED CASES' ? 'Total Confirmed:' : (covidName === 'RECOVERED CASES' ? 'Total Recovered:' : 'Total Deaths:')}</Text>
                     <Text style={{ fontSize: 40, color: 'red', fontFamily: 'FiraSans-Bold' }}>{total}</Text>
                 </View>
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     flatlistView: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal: 10
+        marginHorizontal: StyleConfig.countPixelRatio(15)
     },
     textStyle: {
         fontSize: 20,

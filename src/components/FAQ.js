@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text, Image, ActivityIndicator, SafeAreaView } from 'react-native';
 import AppImages from '../assets/images';
 import { WebView } from 'react-native-webview';
+import StyleConfig from '../assets/StyleConfig'
 
 export default class WebLink extends Component {
     constructor(props) {
@@ -43,7 +44,10 @@ export default class WebLink extends Component {
 const styles = StyleSheet.create({
     firstContainer: {
         flexDirection: 'row',
-        margin: 5
+        margin: 5,   
+        alignItems:'center',
+        marginTop:StyleConfig.countPixelRatio(20),
+        marginBottom:StyleConfig.countPixelRatio(10)
     },
     headerText: {
         fontSize: 20,

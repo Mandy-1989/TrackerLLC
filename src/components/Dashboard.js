@@ -7,7 +7,7 @@ import AppImages from '../assets/images';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../components/navigator';
 // import Icon from 'react-native-vector-icons/FontAwesome';
-
+import StyleConfig from '../assets/StyleConfig'
 
 class Dashboard extends Component {
 
@@ -22,7 +22,7 @@ class Dashboard extends Component {
     setMapIcon = (item) => {
         if (item.headerText == 'CONFIRMED CASES') {
             return <TouchableOpacity style={{ position: 'absolute', right: 0, marginRight: 10, alignItems: 'center' }}
-                onPress={() => navigate('MapViewScreen')}  >
+                onPress={() => navigate('MapViewScreen',{item:true})}  >
                 <Image source={AppImages.earth_image} style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
             </TouchableOpacity>
         }
@@ -131,7 +131,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#F9FEFF'
     },
     firstContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems:'center',
+        marginTop: Platform.OS ==='ios'? StyleConfig.countPixelRatio(40) : StyleConfig.countPixelRatio(20),
+        marginBottom:StyleConfig.countPixelRatio(15)
+
     },
     headerText: {
         fontSize: 20,
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
         fontFamily: 'FiraSans-Medium'
     },
     infoCard: {
-        marginVertical: 5,
+        marginVertical: Platform.OS ==='ios'? StyleConfig.countPixelRatio(10): StyleConfig.countPixelRatio(5) ,
         paddingHorizontal: 15,
         borderRadius: 10,
         flex: 0.3,
