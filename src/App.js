@@ -6,17 +6,17 @@ import { Provider } from 'react-redux';
 import configureStore from './redux/Store/configureStore';
 
 import SplashScreen from "./components/Splash";
-import MapViewScreen from "./components/MapView";
+import MapViewScreen from "./components/MapViewScreen";
 import CountryListScreen from "./components/CountryListScreen";
 import TabNavigatorScreen from "./components/TabNavigator";
-
+import { setNavigator } from './components/navigator';
 
 const store = configureStore()
 
 export default class App extends Component {
     render() {
         return <Provider store={store}>
-            <AppContainer />
+            <AppContainer ref={nav => setNavigator(nav)} />
         </Provider>
     }
 }

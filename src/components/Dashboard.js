@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
 import AppImages from '../assets/images';
 import LinearGradient from 'react-native-linear-gradient';
+import { navigate } from '../components/navigator';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -19,12 +20,12 @@ class Dashboard extends Component {
     }
 
     setMapIcon = (item) => {
-        // if (item.headerText == 'CONFIRMED CASES') {
-        //     return <TouchableOpacity style={{ position: 'absolute', right: 0, marginRight: 10, alignItems: 'center' }}
-        //         onPress={() => this.props.navigation.navigate('MapViewScreen')}  >
-        //         <Image source={AppImages.earth_image} style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
-        //     </TouchableOpacity>
-        // }
+        if (item.headerText == 'CONFIRMED CASES') {
+            return <TouchableOpacity style={{ position: 'absolute', right: 0, marginRight: 10, alignItems: 'center' }}
+                onPress={() => navigate('MapViewScreen')}  >
+                <Image source={AppImages.earth_image} style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
+            </TouchableOpacity>
+        }
     }
 
     render() {
@@ -78,7 +79,7 @@ class Dashboard extends Component {
                                         end={{ x: 1, y: 0 }}
                                         colors={[item.colorOne, item.colorTwo]}
                                         style={[styles.infoCard]} >
-                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('CountryListScreen', { name: item.headerText, total: item.subText })} >
+                                        <TouchableOpacity onPress={() => navigate('CountryListScreen', { name: item.headerText, total: item.subText })} >
                                             <View style={styles.textContainer}>
                                                 <Text style={styles.headerCardText}>{item.headerText}</Text>
                                                 <Text style={styles.subText} >{item.subText}</Text>
