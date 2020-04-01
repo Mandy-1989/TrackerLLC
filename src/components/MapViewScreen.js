@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet,SafeAreaView, ActivityIndicator,Platform,TouchableOpacity } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ActivityIndicator, Platform, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
 import { bindActionCreators } from 'redux';
@@ -39,7 +39,7 @@ class MapViewScreen extends Component {
         const { covidInfo, isLoading } = this.props;
         switch (isLoading) {
             case true:
-                return <View style={styles.viewParent}>                    
+                return <View style={styles.viewParent}>
                     <ActivityIndicator size={'large'} />
                 </View>
             case false:
@@ -52,11 +52,11 @@ class MapViewScreen extends Component {
                 }
 
                 return (
-                    <SafeAreaView style={styles.container}>                      
+                    <SafeAreaView style={styles.container}>
                         <TouchableOpacity style={styles.backIconContainer} onPress={() => this.props.navigation.goBack()}>
                             <Ionicons name={"ios-arrow-back"} size={40} color={'black'} />
                         </TouchableOpacity>
-                        <MapView provider={Platform.OS === 'android' ?  PROVIDER_GOOGLE : null}
+                        <MapView provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
                             mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}
                             zoomEnabled={true}
                             zoomTapEnabled={true}
@@ -67,7 +67,7 @@ class MapViewScreen extends Component {
                                 this.setMarkerPosition(item)
                             ))}
                         </MapView>
-                        
+
                     </SafeAreaView>
                 )
         }
@@ -101,11 +101,11 @@ const styles = StyleSheet.create({
     map: {
         ...StyleSheet.absoluteFillObject,
     },
-    backIconContainer:{
+    backIconContainer: {
         padding: StyleConfig.countPixelRatio(20),
-        position:'absolute',  
+        position: 'absolute',
         zIndex: 60,
-        top:0
+        top: 0
     }
 })
 
