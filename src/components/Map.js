@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, SafeAreaView, ActivityIndicator, Platform, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Dimensions, Platform, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
+
+let { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE = 0;
+const LONGITUDE = 0;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 var mapStyle = [
     {
@@ -247,13 +254,18 @@ export default class Map extends Component {
         super(props)
 
         this.state = {
-            country: []
+            country: [],
+            region: {
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421
+            },
         }
     }
 
-    // componentDidMount() {
-    //     this.props.fetchCovidCountry_19List(1);
-    // }
+
+
 
     setMarkerPosition = (item) => {
         const assetLocations = {
@@ -261,74 +273,56 @@ export default class Map extends Component {
             longitude: parseFloat(item.long)
         };
 
-        // return (
-        //     <Marker coordinate={assetLocations}
-        //         image={require('../assets/images/pin.png')}
-        //     />
-        // )
+        return (
+            <Marker coordinate={assetLocations}
+                image={require('../assets/images/pin.png')}
+            />
+        )
     }
 
     render() {
-        // const item = this.props.navigation.getParams('item')
-        // const { covidInfo, isLoading } = this.props;
-        // switch (isLoading) {
-        //     case true:
-        //         return <View style={styles.viewParent}>
-        //             <ActivityIndicator size={'large'} />
-        //         </View>
-        //     case false:
-        //         if (covidInfo.length > 0) {
-        //             if (this.state.country.length == 0) {
-        //                 this.setState({
-        //                     country: covidInfo
-        //                 })
-        //             }
-        //         }
-
-
 
         return (
             <SafeAreaView style={styles.container}>
                 <TouchableOpacity style={styles.backIconContainer} onPress={() => this.props.navigation.goBack()}>
                     <Ionicons name={"ios-arrow-back"} size={40} color={'black'} />
                 </TouchableOpacity>
-                <MapView
+                {/* <MapView
                     //provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
                     provider={PROVIDER_GOOGLE}
-                    // mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}
+                    mapType={'standard'}
                     customMapStyle={mapStyle}
                     zoomEnabled={true}
                     zoomTapEnabled={true}
                     zoomControlEnabled={true}
                     onRegionChange={this.onRegionChange}
                     // minZoomLevel={3}
+                    region={this.state.region}
                     style={styles.map}>
                     {this.state.country.map(item => (
                         this.setMarkerPosition(item)
                     ))}
+                </MapView> */}
+
+                <MapView
+                    provider={PROVIDER_GOOGLE}
+                    style={styles.container}
+                    customMapStyle={mapStyle}
+                    showsUserLocation={true}
+                    region={this.state.region}
+                    onRegionChange={region => this.setState({ region })}
+                    onRegionChangeComplete={region => this.setState({ region })}
+                >
+                    <MapView.Marker
+                        coordinate={this.state.region}
+                    />
                 </MapView>
-                {/* <MapView provider={PROVIDER_GOOGLE}
-                            
-                        /> */}
+
 
             </SafeAreaView>
         )
     }
 }
-
-
-// function mapStateToProps(state) {
-//     return {
-//         covidInfo: state.covidCountry.covidCountry,
-//         isLoading: state.covidCountry.isFetching,
-//     }
-// }
-
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         ...bindActionCreators({ fetchCovidCountry_19List }, dispatch)
-//     }
-// }
 
 const styles = StyleSheet.create({
     viewParent: {
@@ -351,5 +345,3 @@ const styles = StyleSheet.create({
         top: 0
     }
 })
-
-// export default connect(mapStateToProps, mapDispatchToProps)(MapViewScreen)

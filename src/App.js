@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import configureStore from './redux/Store/configureStore';
 
 import SplashScreen from "./components/Splash";
-import MapViewScreen from "./components/Map";
+import MapViewScreen from "./components/MapViewScreen";
 import CountryListScreen from "./components/CountryListScreen";
 import TabNavigatorScreen from "./components/TabNavigator";
 import { setNavigator } from './components/navigator';

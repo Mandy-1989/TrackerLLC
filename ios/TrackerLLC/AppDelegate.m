@@ -22,7 +22,6 @@
                                             initialProperties:nil];
 
   [GMSServices provideAPIKey:@"AIzaSyDOJM4bdpX3wXWQyx1m5mkQCFohWn1S7pI"];
-  NSURL *jsCodeLocation;
   
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
