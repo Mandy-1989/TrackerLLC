@@ -29,10 +29,10 @@ class Dashboard extends Component {
     }
 
     render() {
-        let confirmed = JSON.stringify(this.props.covidInfo.covid.confirmed);
+        let confirmed = JSON.stringify(this.props.covidInfo.covid.cases);
         let recovered = JSON.stringify(this.props.covidInfo.covid.recovered);
         let deaths = JSON.stringify(this.props.covidInfo.covid.deaths)
-
+            console.log({confirmed})
         let DATA = [
             {
                 id: 1,
@@ -148,10 +148,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderRadius: 10,
         flex: 0.3,
-        shadowColor: '#939393',
+        shadowColor: StyleConfig.COLOR.GREY,
         shadowOffset: {
-            width: 0,
-            height: 5,
+            width: 2,
+            height: 4,
         },
         elevation: 0.9,
         shadowOpacity: 0.8,

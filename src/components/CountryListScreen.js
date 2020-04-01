@@ -25,13 +25,17 @@ class CountryListScreen extends Component {
         this.props.fetchCovidCountry_19List(2);
     }
     renderCountryItem = ({ item, index }) => {
-        let count = covidName === 'CONFIRMED CASES' ? item.confirmed : (covidName === 'RECOVERED CASES' ? item.recovered : item.deaths)
-
+        let count = covidName === 'CONFIRMED CASES' ? JSON.stringify(item.cases) : (covidName === 'RECOVERED CASES' ? JSON.stringify(item.recovered) : JSON.stringify(item.deaths))        
         return (
-            <View style={styles.flatlistView}>
-                <Text style={[styles.textStyle, { color: 'red' }]}>{count}</Text>
-                <Text style={styles.textStyleTwo}>{item.name}</Text>
-            </View>
+            <View style={styles.flatlistView}>                
+                    <View>
+                        <Image source={{uri:item.countryInfo.flag}}  style={styles.imageStyle} />
+                    </View>
+                    <View>
+                        <Text style={styles.textStyleTwo}>{item.country}</Text>
+                        <Text style={[styles.textStyle, { color: StyleConfig.COLOR.GREY_DIM}]}>{count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                    </View>                   
+                </View>
         )
     }
 
@@ -49,14 +53,17 @@ class CountryListScreen extends Component {
         if (this.props.covidInfo !== undefined && this.props.covidInfo !== undefined && this.props.covidInfo !== undefined) {
             data = covidInfo;
         }
+        this.props.covidInfo.sort(function (obj1, obj2) {
+            return  covidName === 'CONFIRMED CASES' ? obj2.cases - obj1.cases : (covidName === 'RECOVERED CASES' ? obj2.recovered - obj1.recovered : obj2.deaths - obj1.deaths)
+        });
 
         return (
             <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
-                <TouchableOpacity style={{ padding: 10,marginTop:StyleConfig.countPixelRatio(30) }} onPress={() => this.props.navigation.goBack()}>
+                <TouchableOpacity style={{ padding: 10, marginTop: StyleConfig.countPixelRatio(30) }} onPress={() => this.props.navigation.goBack()}>
                     <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
                 </TouchableOpacity>
 
-                <View style={{ justifyContent: 'center', alignItems: 'center',marginBottom:StyleConfig.countPixelRatio(10) }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: StyleConfig.countPixelRatio(10) }}>
                     <Text style={{ fontSize: 28, fontFamily: 'FiraSans-Medium' }}> {covidName === 'CONFIRMED CASES' ? 'Total Confirmed:' : (covidName === 'RECOVERED CASES' ? 'Total Recovered:' : 'Total Deaths:')}</Text>
                     <Text style={{ fontSize: 40, color: 'red', fontFamily: 'FiraSans-Bold' }}>{total}</Text>
                 </View>
@@ -64,10 +71,10 @@ class CountryListScreen extends Component {
                 {!isLoading ?
                     <View style={{ marginBottom: 50 }}>
                         <FlatList
-                            keyExtractor={(item, index) => item.name}
+                            keyExtractor={(item, index) => item.country}
                             data={data && data.length !== 0 && data !== undefined ? data : null}
                             renderItem={(index) => this.renderCountryItem(index)}
-                            ItemSeparatorComponent={this.renderSeparator}
+                            // ItemSeparatorComponent={this.renderSeparator}
                         />
                     </View>
                     : null
@@ -88,18 +95,29 @@ const styles = StyleSheet.create({
     flatlistView: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal: StyleConfig.countPixelRatio(15)
+        // justifyContent:'center',
+        marginHorizontal: StyleConfig.countPixelRatio(1)
     },
     textStyle: {
-        fontSize: 20,
+        fontSize: 22,
         width: 80,
         textAlign: 'justify',
         fontFamily: 'FiraSans-Medium'
     },
     textStyleTwo: {
-        fontSize: 18,
-        paddingVertical: 5,
+        fontSize: 20,
+        paddingVertical: 4,
         fontFamily: 'FiraSans-Medium'
+    },
+    imageStyle:{
+        backgroundColor:StyleConfig.COLOR.GREY_DIM, 
+        height:60,
+        width:60,
+        borderWidth:0.1,
+        marginHorizontal:StyleConfig.countPixelRatio(20),
+        marginVertical:StyleConfig.countPixelRatio(10),
+        borderRadius:60/2,
+        alignItems:'center'
     }
 })
 

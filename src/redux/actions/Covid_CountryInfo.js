@@ -7,10 +7,10 @@ export function fetchCovidCountry_19List(type) {
 
     switch (type) {
         case 1:
-            URL = "http://52.8.183.199/api/country/detail";
+            URL = "https://corona.lmao.ninja/countries?sort=country";
             break;
         case 2:
-            URL = "http://52.8.183.199/api/country/count";
+            URL = "https://corona.lmao.ninja/countries?sort=country";
             break;
         default:
             break;
@@ -19,8 +19,7 @@ export function fetchCovidCountry_19List(type) {
     return (dispatch) => {
         dispatch(getCovid_19List())
         axios.get(URL).then(response => {
-            // console.log("Response:" + JSON.stringify(response.data.country))
-            return (dispatch(getCovidSuccess(response.data.country)))
+            return (dispatch(getCovidSuccess(response.data)))
         })
             .catch(err => dispatch(getCovidFailure(err)))
     }

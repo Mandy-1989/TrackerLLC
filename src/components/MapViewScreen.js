@@ -23,8 +23,8 @@ class MapViewScreen extends Component {
 
     setMarkerPosition = (item) => {
         const assetLocations = {
-            latitude: parseFloat(item.lat),
-            longitude: parseFloat(item.long)
+            latitude: parseFloat(item.countryInfo.lat),
+            longitude: parseFloat(item.countryInfo.long)
         };
 
         return (
@@ -35,8 +35,10 @@ class MapViewScreen extends Component {
     }
 
     render() {
-        // const item = this.props.navigation.getParams('item')
         const { covidInfo, isLoading } = this.props;
+        const { country } = this.state;
+        console.log({covidInfo})
+        console.log("State",this.state.country)
         switch (isLoading) {
             case true:
                 return <View style={styles.viewParent}>                    
@@ -44,7 +46,7 @@ class MapViewScreen extends Component {
                 </View>
             case false:
                 if (covidInfo.length > 0) {
-                    if (this.state.country.length == 0) {
+                    if (country.length == 0) {
                         this.setState({
                             country: covidInfo
                         })
@@ -63,7 +65,7 @@ class MapViewScreen extends Component {
                             zoomControlEnabled={true}
                             // minZoomLevel={3}
                             style={styles.map}>
-                            {this.state.country.map(item => (
+                            {country.map(item => (
                                 this.setMarkerPosition(item)
                             ))}
                         </MapView>
