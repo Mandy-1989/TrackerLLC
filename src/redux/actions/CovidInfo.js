@@ -7,9 +7,7 @@ export function fetchCovid_19List() {
 
         // axios.get('http://52.8.183.199/api/dashboard/count')    
         axios.get('https://corona.lmao.ninja/all')
-
             .then(response => {
-                console.log('resonse',response)
                 return (dispatch(getCovidSuccess(response.data)))
             })
             .catch(err => dispatch(getCovidFailure(err)))
