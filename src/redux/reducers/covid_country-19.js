@@ -6,7 +6,7 @@ import {
 
 const initialState = {
     covidCountry: [],
-    isFetching: false,
+    isFetching: true,
     error: false
 }
 

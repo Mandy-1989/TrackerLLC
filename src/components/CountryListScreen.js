@@ -22,20 +22,20 @@ class CountryListScreen extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchCovidCountry_19List(2);
+        this.props.fetchCovidCountry_19List(1);
     }
     renderCountryItem = ({ item, index }) => {
-        let count = covidName === 'CONFIRMED CASES' ? JSON.stringify(item.cases) : (covidName === 'RECOVERED CASES' ? JSON.stringify(item.recovered) : JSON.stringify(item.deaths))        
+        let count = covidName === 'CONFIRMED CASES' ? JSON.stringify(item.cases) : (covidName === 'RECOVERED CASES' ? JSON.stringify(item.recovered) : JSON.stringify(item.deaths))
         return (
-            <View style={styles.flatlistView}>                
-                    <View>
-                        <Image source={{uri:item.countryInfo.flag}}  style={styles.imageStyle} />
-                    </View>
-                    <View>
-                        <Text style={styles.textStyleTwo}>{item.country}</Text>
-                        <Text style={[styles.textStyle, { color: StyleConfig.COLOR.GREY_DIM}]}>{count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
-                    </View>                   
+            <View style={styles.flatlistView}>
+                <View>
+                    <Image source={{ uri: item.countryInfo.flag }} style={styles.imageStyle} />
                 </View>
+                <View>
+                    <Text style={styles.textStyleTwo}>{item.country}</Text>
+                    <Text style={[styles.textStyle, { color: StyleConfig.COLOR.GREY_DIM }]}>{count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                </View>
+            </View>
         )
     }
 
@@ -53,9 +53,12 @@ class CountryListScreen extends Component {
         if (this.props.covidInfo !== undefined && this.props.covidInfo !== undefined && this.props.covidInfo !== undefined) {
             data = covidInfo;
         }
-        this.props.covidInfo.sort(function (obj1, obj2) {
-            return  covidName === 'CONFIRMED CASES' ? obj2.cases - obj1.cases : (covidName === 'RECOVERED CASES' ? obj2.recovered - obj1.recovered : obj2.deaths - obj1.deaths)
-        });
+
+        if (this.props.covidInfo.length > 0) {
+            this.props.covidInfo.sort(function (obj1, obj2) {
+                return covidName === 'CONFIRMED CASES' ? obj2.cases - obj1.cases : (covidName === 'RECOVERED CASES' ? obj2.recovered - obj1.recovered : obj2.deaths - obj1.deaths)
+            });
+        }
 
         return (
             <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
@@ -74,7 +77,7 @@ class CountryListScreen extends Component {
                             keyExtractor={(item, index) => item.country}
                             data={data && data.length !== 0 && data !== undefined ? data : null}
                             renderItem={(index) => this.renderCountryItem(index)}
-                            // ItemSeparatorComponent={this.renderSeparator}
+                        // ItemSeparatorComponent={this.renderSeparator}
                         />
                     </View>
                     : null
@@ -109,15 +112,15 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
         fontFamily: 'FiraSans-Medium'
     },
-    imageStyle:{
-        backgroundColor:StyleConfig.COLOR.GREY_DIM, 
-        height:60,
-        width:60,
-        borderWidth:0.1,
-        marginHorizontal:StyleConfig.countPixelRatio(20),
-        marginVertical:StyleConfig.countPixelRatio(10),
-        borderRadius:60/2,
-        alignItems:'center'
+    imageStyle: {
+        backgroundColor: StyleConfig.COLOR.GREY_DIM,
+        height: 60,
+        width: 60,
+        borderWidth: 0.1,
+        marginHorizontal: StyleConfig.countPixelRatio(20),
+        marginVertical: StyleConfig.countPixelRatio(10),
+        borderRadius: 60 / 2,
+        alignItems: 'center'
     }
 })
 

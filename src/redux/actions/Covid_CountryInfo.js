@@ -1,4 +1,5 @@
 import { FETCH_COVID_COUNTRY_SUCCESS, FETCH_COVID_COUNTRY_FAILURE, FETCHING_COVID_COUNTRY_INFO } from '../../constants/APIConstants';
+import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
 export function fetchCovidCountry_19List(type) {
@@ -10,7 +11,7 @@ export function fetchCovidCountry_19List(type) {
             URL = "https://corona.lmao.ninja/countries?sort=country";
             break;
         case 2:
-            URL = "https://corona.lmao.ninja/countries?sort=country";
+            URL = "https://corona.lmao.ninja/countries/USA";
             break;
         default:
             break;
@@ -20,8 +21,7 @@ export function fetchCovidCountry_19List(type) {
         dispatch(getCovid_19List())
         axios.get(URL).then(response => {
             return (dispatch(getCovidSuccess(response.data)))
-        })
-            .catch(err => dispatch(getCovidFailure(err)))
+        }).catch(err => dispatch(getCovidFailure(err)))
     }
 }
 
