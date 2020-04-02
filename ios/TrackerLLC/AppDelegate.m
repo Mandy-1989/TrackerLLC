@@ -10,6 +10,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
@@ -20,6 +21,8 @@
                                                    moduleName:@"TrackerLLC"
                                             initialProperties:nil];
 
+  [GMSServices provideAPIKey:@"AIzaSyDOJM4bdpX3wXWQyx1m5mkQCFohWn1S7pI"];
+  
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
