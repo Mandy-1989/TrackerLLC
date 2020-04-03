@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, SafeAreaView, Dimensions, Platform, TouchableOpacity } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Geojson, Circle } from 'react-native-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
+
 
 var mapStyle = [
     {
@@ -279,28 +280,56 @@ export default class Map extends Component {
         super(props)
 
         this.state = {
-            country: [],
+            country: [{
+                lat: 22.303894,
+                long: 70.802162
+            },
+            {
+                lat: 21.1591857,
+                long: 72.752084
+            },
+            {
+                lat: 19.0821976,
+                long: 72.7407561
+            },
+            {
+                lat: 15.3470372,
+                long: 73.731424
+            },
+            {
+                lat: 28.6466758,
+                long: 76.8123845
+            },
+
+            ],
             region: {
-                latitude: 37.78825,
-                longitude: -122.4324,
+                latitude: 22.303894,
+                longitude: 70.802162,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
+            },
+
+            currentLongitude: 22.2818476,
+            currentLongitude: 70.7510417,
+            LATLNG: {
+                latitude: 22.303894,
+                longitude: 70.802162
             },
         }
     }
 
-
-
-
     setMarkerPosition = (item) => {
-        const assetLocations = {
+        const LATLNG = {
             latitude: parseFloat(item.lat),
             longitude: parseFloat(item.long)
         };
-
         return (
-            <Marker coordinate={assetLocations}
-                image={require('../assets/images/pin.png')}
+            <MapView.Circle
+                center={LATLNG}
+                radius={50000}
+                stokeWidth={0}
+                strokeColor={'rgba(245, 19, 7,0.5)'}
+                fillColor={'rgba(245, 19, 7,0.5)'}
             />
         )
     }
@@ -315,37 +344,19 @@ export default class Map extends Component {
                 <MapView
                     //provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
                     provider={PROVIDER_GOOGLE}
-                    mapType={'hybrid'}
+
+                    isAccessibilityElement={true}
                     customMapStyle={mapStyle}
                     zoomEnabled={true}
                     zoomTapEnabled={true}
                     zoomControlEnabled={true}
                     onRegionChange={this.onRegionChange}
-                    // minZoomLevel={3}
                     region={this.state.region}
                     style={styles.map}>
                     {this.state.country.map(item => (
                         this.setMarkerPosition(item)
                     ))}
                 </MapView>
-
-                {/* <MapView
-                    // provider={PROVIDER_GOOGLE}
-                    style={styles.container}
-                    customMapStyle={mapStyle}
-                    //showsUserLocation={true}
-                    zoomEnabled={true}
-                    zoomTapEnabled={true}
-                    zoomControlEnabled={true}
-                    region={this.state.region}
-                    onRegionChange={region => this.setState({ region })}
-                    onRegionChangeComplete={region => this.setState({ region })}
-                >
-                    <MapView.Marker
-                        coordinate={this.state.region}
-                    />
-                </MapView> */}
-
 
             </SafeAreaView>
         )
@@ -360,8 +371,6 @@ const styles = StyleSheet.create({
     },
     container: {
         ...StyleSheet.absoluteFillObject,
-        // justifyContent: 'flex-end',
-        // alignItems: 'center',
     },
     map: {
         ...StyleSheet.absoluteFillObject,
@@ -373,3 +382,17 @@ const styles = StyleSheet.create({
         top: 0
     }
 })
+
+const myPlace = {
+    type: 'FeatureCollection',
+    features: [
+        {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: 'Point',
+                coordinates: [64.165329, 48.844287],
+            }
+        }
+    ]
+};
