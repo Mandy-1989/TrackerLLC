@@ -282,29 +282,54 @@ export default class Map extends Component {
         this.state = {
             country: [{
                 lat: 22.303894,
-                long: 70.802162
+                long: 70.802162,
+                cases: 50000
+            },
+            {
+                lat: 23.0201815,
+                long: 72.4393129,
+                cases: 9000
+            },
+            {
+                lat: 23.7083451,
+                long: 68.7987823,
+                cases: 4000
+            },
+            {
+                lat: 20.72061,
+                long: 70.9103814,
+                cases: 10000
+            },
+            {
+                lat: 22.3220875,
+                long: 73.1028741,
+                cases: 500
             },
             {
                 lat: 21.1591857,
-                long: 72.752084
+                long: 72.752084,
+                cases: 22000
             },
             {
                 lat: 19.0821976,
-                long: 72.7407561
+                long: 72.7407561,
+                cases: 12000
             },
             {
                 lat: 15.3470372,
-                long: 73.731424
+                long: 73.731424,
+                cases: 4000
             },
             {
                 lat: 28.6466758,
-                long: 76.8123845
+                long: 76.8123845,
+                cases: 7000
             },
 
             ],
             region: {
-                latitude: 22.303894,
-                longitude: 70.802162,
+                latitude: 20.0069598,
+                longitude: 64.3980887,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             },
@@ -321,17 +346,53 @@ export default class Map extends Component {
     setMarkerPosition = (item) => {
         const LATLNG = {
             latitude: parseFloat(item.lat),
-            longitude: parseFloat(item.long)
+            longitude: parseFloat(item.long),
         };
-        return (
-            <MapView.Circle
-                center={LATLNG}
-                radius={50000}
-                stokeWidth={0}
-                strokeColor={'rgba(245, 19, 7,0.5)'}
-                fillColor={'rgba(245, 19, 7,0.5)'}
-            />
-        )
+
+        if (parseInt(item.cases) > 20000 || parseInt(item.cases) == 20000) {
+            return (
+                <MapView.Circle
+                    center={LATLNG}
+                    radius={100000}
+                    stokeWidth={0.4}
+                    strokeColor={'white'}
+                    fillColor={'rgba(245, 19, 7,0.5)'}
+                />
+            )
+        } else
+            if (parseInt(item.cases) < 20000 || parseInt(item.cases) == 20000) {
+                return (
+                    <MapView.Circle
+                        center={LATLNG}
+                        radius={80000}
+                        stokeWidth={0.4}
+                        strokeColor={'white'}
+                        fillColor={'rgba(245, 19, 7,0.4)'}
+                    />
+                )
+            } else
+                if (parseInt(item.cases) < 10000 && parseInt(item.cases) > 5000) {
+                    return (
+                        <MapView.Circle
+                            center={LATLNG}
+                            radius={60000}
+                            stokeWidth={0.4}
+                            strokeColor={'white'}
+                            fillColor={'rgba(245, 19, 7,0.3)'}
+                        />
+                    )
+                } else
+                    if (parseInt(item.cases) == 5000 || parseInt(item.cases) < 5000) {
+                        return (
+                            <MapView.Circle
+                                center={LATLNG}
+                                radius={40000}
+                                stokeWidth={0}
+                                strokeColor={'white'}
+                                fillColor={'rgba(245, 19, 7,0.2)'}
+                            />
+                        )
+                    }
     }
 
     render() {
@@ -344,7 +405,6 @@ export default class Map extends Component {
                 <MapView
                     //provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
                     provider={PROVIDER_GOOGLE}
-
                     isAccessibilityElement={true}
                     customMapStyle={mapStyle}
                     zoomEnabled={true}
