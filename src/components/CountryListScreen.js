@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList } from 'react-native';
 import AppImages from '../assets/images';
-import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
+import { fetchCountryList } from '../redux/actions/CountryList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,13 +16,12 @@ class CountryListScreen extends Component {
         super(props)
         this.state = {
         }
-
         covidName = this.props.navigation.getParam('name')
         total = this.props.navigation.getParam('total')
     }
 
     componentDidMount() {
-        this.props.fetchCovidCountry_19List(1);
+        this.props.fetchCountryList();
     }
     renderCountryItem = ({ item, index }) => {
         let count = covidName === 'CONFIRMED CASES' ? JSON.stringify(item.cases) : (covidName === 'RECOVERED CASES' ? JSON.stringify(item.recovered) : JSON.stringify(item.deaths))
@@ -47,46 +46,39 @@ class CountryListScreen extends Component {
     );
 
     render() {
-        let data;
-        const { covidInfo, isLoading } = this.props;
-
-        if (this.props.covidInfo !== undefined && this.props.covidInfo !== undefined && this.props.covidInfo !== undefined) {
-            data = covidInfo;
-        }
-
-        if (this.props.covidInfo.length > 0) {
-            this.props.covidInfo.sort(function (obj1, obj2) {
-                return covidName === 'CONFIRMED CASES' ? obj2.cases - obj1.cases : (covidName === 'RECOVERED CASES' ? obj2.recovered - obj1.recovered : obj2.deaths - obj1.deaths)
-            });
-        }
-
-        return (
-            <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
-                <TouchableOpacity style={{ padding: 10, marginTop: StyleConfig.countPixelRatio(30) }} onPress={() => this.props.navigation.goBack()}>
-                    <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
-                </TouchableOpacity>
-
-                <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: StyleConfig.countPixelRatio(10) }}>
-                    <Text style={{ fontSize: 28, fontFamily: 'FiraSans-Medium' }}> {covidName === 'CONFIRMED CASES' ? 'Total Confirmed:' : (covidName === 'RECOVERED CASES' ? 'Total Recovered:' : 'Total Deaths:')}</Text>
-                    <Text style={{ fontSize: 40, color: 'red', fontFamily: 'FiraSans-Bold' }}>{total}</Text>
+        switch (this.props.isFetching) {
+            case true:
+                return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size={'large'} />
                 </View>
-
-                {!isLoading ?
-                    <View style={{ marginBottom: 50 }}>
-                        <FlatList
-                            keyExtractor={(item, index) => item.country}
-                            data={data && data.length !== 0 && data !== undefined ? data : null}
-                            renderItem={(index) => this.renderCountryItem(index)}
-                        // ItemSeparatorComponent={this.renderSeparator}
-                        />
-                    </View>
-                    : null
-                    // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    //     <ActivityIndicator size={'large'} />
-                    // </View>
+            case false:
+                if (this.props.countryList.length > 0) {
+                    this.props.countryList.sort(function (obj1, obj2) {
+                        return covidName === 'CONFIRMED CASES' ? obj2.cases - obj1.cases : (covidName === 'RECOVERED CASES' ? obj2.recovered - obj1.recovered : obj2.deaths - obj1.deaths)
+                    });
                 }
-            </View>
-        )
+
+                return (
+                    <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
+                        <TouchableOpacity style={{ padding: 10, marginTop: StyleConfig.countPixelRatio(30) }} onPress={() => this.props.navigation.goBack()}>
+                            <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
+                        </TouchableOpacity>
+
+                        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: StyleConfig.countPixelRatio(10) }}>
+                            <Text style={{ fontSize: 28, fontFamily: 'FiraSans-Medium' }}> {covidName === 'CONFIRMED CASES' ? 'Total Confirmed:' : (covidName === 'RECOVERED CASES' ? 'Total Recovered:' : 'Total Deaths:')}</Text>
+                            <Text style={{ fontSize: 40, color: 'red', fontFamily: 'FiraSans-Bold' }}>{total}</Text>
+                        </View>
+
+                        <View style={{ marginBottom: 50 }}>
+                            <FlatList
+                                keyExtractor={(item, index) => item.country}
+                                data={this.props.countryList}
+                                renderItem={(index) => this.renderCountryItem(index)}
+                            />
+                        </View>
+                    </View>
+                )
+        }
     }
 }
 const styles = StyleSheet.create({
@@ -125,15 +117,15 @@ const styles = StyleSheet.create({
 })
 
 function mapStateToProps(state) {
+    const { isFetching, countryList } = state.countryList;
     return {
-        covidInfo: state.covidCountry.covidCountry,
-        isLoading: state.covidCountry.isFetching,
+        isFetching, countryList
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        ...bindActionCreators({ fetchCovidCountry_19List }, dispatch)
+        ...bindActionCreators({ fetchCountryList }, dispatch)
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, Text, TouchableOpacity, TouchableHighlight, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { View, SafeAreaView, Text, TouchableOpacity, ScrollView, ActivityIndicator, StyleSheet, Image } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
@@ -10,7 +10,9 @@ import { navigate } from '../components/navigator';
 import { string } from '../constants/String';
 import colors from '../constants/Colors';
 import StyleConfig from '../assets/StyleConfig';
-import { ScrollView } from 'react-native-gesture-handler';
+
+let USATotalCases = '';
+let USATotalDeaths = '';
 
 class Dashboard extends Component {
 
@@ -35,98 +37,98 @@ class Dashboard extends Component {
     }
 
     render() {
-        switch (this.props.covidInfo.isFetching) {
+        switch (this.props.isFetching) {
             case true:
                 return <View style={styles.viewLoader}>
                     <ActivityIndicator size={'large'} />
                 </View>
             case false:
-                if (this.props.covidCountry.length > 0) {
-                    let confirmed = JSON.stringify(this.props.covidInfo.covid.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    let recovered = JSON.stringify(this.props.covidInfo.covid.recovered).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    let deaths = JSON.stringify(this.props.covidInfo.covid.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let confirmed = JSON.stringify(this.props.covid.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let recovered = JSON.stringify(this.props.covid.recovered).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let deaths = JSON.stringify(this.props.covid.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-                    let USATotalCases = JSON.stringify(this.props.covidCountry.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    let USATotalDeaths = JSON.stringify(this.props.covidCountry.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                console.log("this.props.covidCountry:" + JSON.stringify(this.props.covidCountry))
+                if (this.props.covidCountry) {
+                    USATotalCases = JSON.stringify(this.props.covidCountry.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    USATotalDeaths = JSON.stringify(this.props.covidCountry.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
 
-                    return (
-                        <SafeAreaView style={styles.viewParent} >
-                            <View style={{ flex: 1, margin: 10 }}>
-                                <View style={styles.firstContainer}>
-                                    <Image resizeMode={'contain'} source={AppImages.icon_image} style={{ height: 80, width: 80 }} />
-                                    <Text style={styles.headerText}>
-                                        {string.str_global_access}
-                                    </Text>
-                                </View>
-
-                                <ScrollView style={{ flex: 1 }}
-                                    showsVerticalScrollIndicator={false}
-                                >
-                                    <LinearGradient start={{ x: 0, y: 0 }}
-                                        end={{ x: 1, y: 0 }}
-                                        colors={[colors.color_7, colors.color_8]}
-                                        style={[styles.infoCard, { paddingVertical: 5 }]} >
-
-                                        <Text style={styles.txtCountry}>{string.str_unitedStatus}</Text>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View>
-                                                <Text style={styles.txtTitle}>{string.str_total_cases}</Text>
-                                                <Text style={styles.txtSubTitle}>{USATotalCases}</Text>
-                                            </View>
-                                            <View>
-                                                <Text style={styles.txtTitle}>{string.str_total_death}</Text>
-                                                <Text style={styles.txtSubTitle}>{USATotalDeaths}</Text>
-                                            </View>
-                                        </View>
-                                    </LinearGradient>
-
-                                    <LinearGradient start={{ x: 0, y: 0 }}
-                                        end={{ x: 1, y: 0 }}
-                                        colors={[colors.color_1, colors.color_2]}
-                                        style={styles.infoCard} >
-                                        <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => this.onCasesPressed(string.str_confirmed_case, confirmed)}>
-                                            <Text style={styles.headerCardText}>{string.str_confirmed_case}</Text>
-                                            <Text style={styles.subText} >{confirmed}</Text>
-
-                                            {this.setMapIcon()}
-                                        </TouchableOpacity>
-                                    </LinearGradient>
-
-                                    <LinearGradient start={{ x: 0, y: 0 }}
-                                        end={{ x: 1, y: 0 }}
-                                        colors={[colors.color_3, colors.color_4]}
-                                        style={styles.infoCard} >
-                                        <TouchableOpacity onPress={() => this.onCasesPressed(string.str_death_case, deaths)}>
-                                            <Text style={styles.headerCardText}>{string.str_death_case}</Text>
-                                            <Text style={styles.subText}>{deaths}</Text>
-                                        </TouchableOpacity>
-                                    </LinearGradient>
-
-                                    <LinearGradient start={{ x: 0, y: 0 }}
-                                        end={{ x: 1, y: 0 }}
-                                        colors={[colors.color_5, colors.color_6]}
-                                        style={styles.infoCard} >
-                                        <TouchableOpacity onPress={() => this.onCasesPressed(string.str_recovered_case, recovered)}>
-                                            <Text style={styles.headerCardText}>{string.str_recovered_case}</Text>
-                                            <Text style={styles.subText}>{recovered}</Text>
-                                        </TouchableOpacity>
-                                    </LinearGradient>
-                                </ScrollView>
+                return (
+                    <SafeAreaView style={styles.viewParent} >
+                        <View style={{ flex: 1, margin: 10 }}>
+                            <View style={styles.firstContainer}>
+                                <Image resizeMode={'contain'} source={AppImages.icon_image} style={{ height: 80, width: 80 }} />
+                                <Text style={styles.headerText}>
+                                    {string.str_global_access}
+                                </Text>
                             </View>
-                        </SafeAreaView>
-                    )
-                }
-                else {
-                    return <View></View>
-                }
+
+                            <ScrollView style={{ flex: 1 }}
+                                showsVerticalScrollIndicator={false}
+                            >
+                                <LinearGradient start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                    colors={[colors.color_7, colors.color_8]}
+                                    style={[styles.infoCard, { paddingVertical: 5 }]} >
+
+                                    <Text style={styles.txtCountry}>{string.str_unitedStatus}</Text>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View>
+                                            <Text style={styles.txtTitle}>{string.str_total_cases}</Text>
+                                            <Text style={styles.txtSubTitle}>{USATotalCases}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={styles.txtTitle}>{string.str_total_death}</Text>
+                                            <Text style={styles.txtSubTitle}>{USATotalDeaths}</Text>
+                                        </View>
+                                    </View>
+                                </LinearGradient>
+
+                                <LinearGradient start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                    colors={[colors.color_1, colors.color_2]}
+                                    style={styles.infoCard} >
+                                    <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => this.onCasesPressed(string.str_confirmed_case, confirmed)}>
+                                        <Text style={styles.headerCardText}>{string.str_confirmed_case}</Text>
+                                        <Text style={styles.subText} >{confirmed}</Text>
+
+                                        {this.setMapIcon()}
+                                    </TouchableOpacity>
+                                </LinearGradient>
+
+                                <LinearGradient start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                    colors={[colors.color_3, colors.color_4]}
+                                    style={styles.infoCard} >
+                                    <TouchableOpacity onPress={() => this.onCasesPressed(string.str_death_case, deaths)}>
+                                        <Text style={styles.headerCardText}>{string.str_death_case}</Text>
+                                        <Text style={styles.subText}>{deaths}</Text>
+                                    </TouchableOpacity>
+                                </LinearGradient>
+
+                                <LinearGradient start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                    colors={[colors.color_5, colors.color_6]}
+                                    style={styles.infoCard} >
+                                    <TouchableOpacity onPress={() => this.onCasesPressed(string.str_recovered_case, recovered)}>
+                                        <Text style={styles.headerCardText}>{string.str_recovered_case}</Text>
+                                        <Text style={styles.subText}>{recovered}</Text>
+                                    </TouchableOpacity>
+                                </LinearGradient>
+                            </ScrollView>
+                        </View>
+                    </SafeAreaView>
+                )
         }
     }
 }
 
 function mapStateToProps(state) {
+    const { isFetching, covid } = state.covid
+    const { covidCountry } = state.covidCountry
+
     return {
-        covidInfo: state.covid,
-        covidCountry: state.covidCountry.covidCountry
+        isFetching, covid, covidCountry
     }
 }
 

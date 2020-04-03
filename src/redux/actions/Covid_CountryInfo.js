@@ -1,5 +1,4 @@
 import { FETCH_COVID_COUNTRY_SUCCESS, FETCH_COVID_COUNTRY_FAILURE, FETCHING_COVID_COUNTRY_INFO } from '../../constants/APIConstants';
-import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
 export function fetchCovidCountry_19List(type) {
