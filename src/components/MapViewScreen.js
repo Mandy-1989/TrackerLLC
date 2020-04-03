@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, SafeAreaView, ActivityIndicator, Platform, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
+import { fetchCountryList } from '../redux/actions/CountryList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
+import { mapStyle } from '../constants/MapStyle'
 
 class MapViewScreen extends Component {
 
@@ -18,7 +19,7 @@ class MapViewScreen extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchCovidCountry_19List(1);
+        this.props.fetchCountryList(1);
     }
 
     setMarkerPosition = (item) => {
@@ -28,27 +29,30 @@ class MapViewScreen extends Component {
         };
 
         return (
-            <Marker coordinate={assetLocations}
-                image={require('../assets/images/pin.png')}
+            // <Marker coordinate={assetLocations}
+            //     image={require('../assets/images/pin.png')}
+            // />
+            <MapView.Circle
+                center={assetLocations}
+                radius={100000}
+                stokeWidth={0.4}
+                strokeColor={'white'}
+                fillColor={'rgba(245, 19, 7,0.4)'}
             />
         )
     }
 
     render() {
-        const { covidInfo, isLoading } = this.props;
-        const { country } = this.state;
-        console.log({ covidInfo })
-        console.log("State", this.state.country)
-        switch (isLoading) {
+        switch (this.props.isFetching) {
             case true:
                 return <View style={styles.viewParent}>
                     <ActivityIndicator size={'large'} />
                 </View>
             case false:
-                if (covidInfo.length > 0) {
-                    if (country.length == 0) {
+                if (this.props.countryList.length > 0) {
+                    if (this.state.country.length == 0) {
                         this.setState({
-                            country: covidInfo
+                            country: this.props.countryList
                         })
                     }
                 }
@@ -59,13 +63,18 @@ class MapViewScreen extends Component {
                             <Ionicons name={"ios-arrow-back"} size={40} color={'black'} />
                         </TouchableOpacity>
                         <MapView provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
-                            mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}
+                            // mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}
                             zoomEnabled={true}
                             zoomTapEnabled={true}
                             zoomControlEnabled={true}
-                            // minZoomLevel={3}
+                            isAccessibilityElement={true}
+                            customMapStyle={mapStyle}
+                            zoomEnabled={true}
+                            zoomTapEnabled={true}
+                            zoomControlEnabled={true}
+                            onRegionChange={this.onRegionChange}
                             style={styles.map}>
-                            {country.map(item => (
+                            {this.state.country.map(item => (
                                 this.setMarkerPosition(item)
                             ))}
                         </MapView>
@@ -77,15 +86,15 @@ class MapViewScreen extends Component {
 }
 
 function mapStateToProps(state) {
+    const { isFetching, countryList } = state.countryList;
     return {
-        covidInfo: state.covidCountry.covidCountry,
-        isLoading: state.covidCountry.isFetching,
+        isFetching, countryList
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        ...bindActionCreators({ fetchCovidCountry_19List }, dispatch)
+        ...bindActionCreators({ fetchCountryList }, dispatch)
     }
 }
 

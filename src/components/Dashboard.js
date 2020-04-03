@@ -3,7 +3,7 @@ import { View, SafeAreaView, Text, TouchableOpacity, ScrollView, ActivityIndicat
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
-import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
+import { fetchCountryData } from '../redux/actions/CountryInfo';
 import AppImages from '../assets/images';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../components/navigator';
@@ -18,7 +18,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
         this.props.fetchCovid_19List();
-        this.props.fetchCovidCountry_19List(2);
+        this.props.fetchCountryData();
     }
 
     onClick = (clickType) => {
@@ -26,9 +26,10 @@ class Dashboard extends Component {
     }
 
     setMapIcon = () => {
-        return <TouchableOpacity style={{ position: 'absolute', right: 0, marginRight: 10, alignItems: 'center' }}
-            onPress={() => navigate('MapViewScreen', { item: true })}  >
-            <Image source={AppImages.earth_image} style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
+        return <TouchableOpacity style={{ position: 'absolute', right: 0, alignItems: 'center' }}
+            onPress={() => navigate('Map', { item: true })}  >
+            <Image source={AppImages.earth_GIF}
+                style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
         </TouchableOpacity>
     }
 
@@ -47,10 +48,9 @@ class Dashboard extends Component {
                 let recovered = JSON.stringify(this.props.covid.recovered).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 let deaths = JSON.stringify(this.props.covid.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-                console.log("this.props.covidCountry:" + JSON.stringify(this.props.covidCountry))
-                if (this.props.covidCountry) {
-                    USATotalCases = JSON.stringify(this.props.covidCountry.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    USATotalDeaths = JSON.stringify(this.props.covidCountry.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (this.props.countryInfo) {
+                    USATotalCases = JSON.stringify(this.props.countryInfo.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    USATotalDeaths = JSON.stringify(this.props.countryInfo.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
 
                 return (
@@ -125,16 +125,15 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
     const { isFetching, covid } = state.covid
-    const { covidCountry } = state.covidCountry
-
+    const { countryInfo } = state.country
     return {
-        isFetching, covid, covidCountry
+        isFetching, covid, countryInfo
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        ...bindActionCreators({ fetchCovid_19List, fetchCovidCountry_19List }, dispatch)
+        ...bindActionCreators({ fetchCovid_19List, fetchCountryData }, dispatch)
     }
 }
 

@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList } from 'react-native';
-import AppImages from '../assets/images';
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native';
 import { fetchCountryList } from '../redux/actions/CountryList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,10 +8,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../constants/Colors';
+import BarGraph from './BarGraph';
 
 let covidName;
-let total;
-let searchDataItem = [];
+
+const window = Dimensions.get('window')
+
 class CountryListScreen extends Component {
 
     constructor(props) {
@@ -23,13 +24,11 @@ class CountryListScreen extends Component {
             searchData: []
         }
         covidName = this.props.navigation.getParam('name')
-        total = this.props.navigation.getParam('total')
     }
 
     componentDidMount() {
         this.props.fetchCountryList();
         this.setState({ selectedData: this.props.countryList, searchData: this.props.countryList })
-
     }
 
     renderCountryItem = ({ item, index }) => {
@@ -39,11 +38,10 @@ class CountryListScreen extends Component {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 colors={[colors.color_9, colors.color_10]} style={styles.flatlistView}>
-                <View>
-                    <Image source={{ uri: item.countryInfo.flag }} style={styles.imageStyle} />
-                </View>
-                <Text style={styles.textStyleTwo}>{item.country}</Text>
-                <View style={{ flex: 1, alignItems: 'flex-end', margin: 15 }}>
+
+                <Image source={{ uri: item.countryInfo.flag }} style={styles.imageStyle} />
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginHorizontal: 10 }}>
+                    <Text style={styles.textStyleTwo}>{item.country}</Text>
                     <Text style={[styles.textStyle, { color: colors.color_2 }]}>{count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
                 </View>
             </LinearGradient>
@@ -62,7 +60,7 @@ class CountryListScreen extends Component {
         if (searchData !== null && searchData !== undefined && searchData !== []) {
             let data = searchData.filter(function (item) {
                 let type = item.country;
-                return (type.trim().toLowerCase().includes(searchValue.trim().toLowerCase()))
+                return (type.trim().toLowerCase().startsWith(searchValue.trim().toLowerCase()))
             });
 
             this.setState({ selectedData: data })
@@ -83,38 +81,35 @@ class CountryListScreen extends Component {
                 }
 
                 return (
-                    <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
-                        <TouchableOpacity style={{ padding: 10, marginTop: StyleConfig.countPixelRatio(30) }} onPress={() => this.props.navigation.goBack()}>
-                            <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
-                        </TouchableOpacity>
+                    <View style={{ flex: 1, backgroundColor: 'white' }}>
+                        <View style={{ height: window.height / 2 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }} >
+                                <TouchableOpacity style={{ padding: 10 }} onPress={() => this.props.navigation.goBack()}>
+                                    <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
+                                </TouchableOpacity>
 
-                        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: StyleConfig.countPixelRatio(10) }}>
-                            <Text style={{ fontSize: 28, fontFamily: 'FiraSans-Medium' }}> {covidName === 'CONFIRMED CASES' ? 'Total Confirmed:' : (covidName === 'RECOVERED CASES' ? 'Total Recovered:' : 'Total Deaths:')}</Text>
-                            <Text style={{ fontSize: 40, color: 'red', fontFamily: 'FiraSans-Bold' }}>{total}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: StyleConfig.countPixelRatio(20) }} >
-                            <Ionicons name={'ios-search'} size={22} />
-                            <TextInput
-                                placeholder={'Search'}
-                                style={styles.textInput}
-                                onChangeText={(text) => this._onSearch(text)}
-                            />
-                        </View>
-                        {this.state.selectedData.length === 0 || this.state.searchData.length === 0 ?
-                            <View style={{ alignSelf: 'center' ,marginTop:StyleConfig.countPixelRatio(50)}}>
-                                <Text style={{ fontFamily: 'firasans-bold',fontSize:20 }}>{'No data found'}</Text>
-                            </View>
-                            :
-                            <View style={{ marginBottom: 50 }}>
-                                <FlatList
-                                    keyExtractor={(item, index) => item.country}
-                                    data={this.state.selectedData}
-                                    renderItem={(index) => this.renderCountryItem(index)}
-                                    ItemSeparatorComponent={this.renderSeparator}
+                                <Ionicons style={{ marginLeft: 10 }}
+                                    name={'ios-search'}
+                                    color={colors.grey}
+                                    size={18} />
 
+                                <TextInput
+                                    placeholder={'Search'}
+                                    style={styles.textInput}
+                                    onChangeText={(text) => this._onSearch(text)}
                                 />
                             </View>
-                        }
+
+                            <FlatList
+                                keyExtractor={(item, index) => item.country}
+                                data={this.state.selectedData}
+                                renderItem={(index) => this.renderCountryItem(index)}
+                                ItemSeparatorComponent={this.renderSeparator}
+                            />
+                        </View>
+                        <View style={{ height: window.height / 2 }}>
+                            <BarGraph></BarGraph>
+                        </View>
                     </View>
                 )
         }
@@ -128,35 +123,32 @@ const styles = StyleSheet.create({
     },
     flatlistView: {
         flexDirection: 'row',
-        alignItems: 'center',
-        // justifyContent:'center',
-        marginHorizontal: StyleConfig.countPixelRatio(1)
+        alignItems: 'center'
     },
     textStyle: {
-        fontSize: 22,
-        width: 80,
-        textAlign: 'justify',
-        fontFamily: 'FiraSans-Medium'
+        fontSize: 16,
+        textAlignVertical: 'center',
+        fontFamily: 'FiraSans-Bold'
     },
     textStyleTwo: {
-        fontSize: 20,
-        paddingVertical: 4,
-        fontFamily: 'FiraSans-Medium'
+        fontSize: 16,
+        fontFamily: 'FiraSans-Bold'
     },
     imageStyle: {
         backgroundColor: StyleConfig.COLOR.GREY_DIM,
-        height: 60,
-        width: 60,
+        height: 40,
+        width: 40,
         borderWidth: 0.1,
-        marginHorizontal: StyleConfig.countPixelRatio(20),
+        marginHorizontal: StyleConfig.countPixelRatio(10),
         marginVertical: StyleConfig.countPixelRatio(10),
-        borderRadius: 60 / 2,
+        borderRadius: 40 / 2,
         alignItems: 'center',
     },
     textInput: {
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        fontSize: 20
+        flex: 1,
+        padding: 10,
+        fontFamily: 'FiraSans-Regular',
+        fontSize: 18
     }
 })
 

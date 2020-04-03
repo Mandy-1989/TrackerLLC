@@ -7,9 +7,7 @@ export function setNavigator(nav) {
 }
 
 export function navigate(routeName, params) {
-    console.log("routeName:" + routeName)
     if (navigator) {
-        console.log("routeName:::::::" + routeName)
         navigator.dispatch(NavigationActions.navigate({ routeName, params }));
     }
 }
