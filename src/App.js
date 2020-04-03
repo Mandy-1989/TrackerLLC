@@ -8,6 +8,8 @@ import configureStore from './redux/Store/configureStore';
 import SplashScreen from "./components/Splash";
 import MapViewScreen from "./components/MapViewScreen";
 import CountryListScreen from "./components/CountryListScreen";
+import BarGraphScreen from "./components/BarGraph";
+import MapScreen from "./components/Map";
 import TabNavigatorScreen from "./components/TabNavigator";
 import { setNavigator } from './components/navigator';
 
@@ -53,6 +55,20 @@ const AppNavigator = createStackNavigator({
     },
     CountryListScreen: {
         screen: CountryListScreen,
+        navigationOptions: {
+            title: 'Home',
+            headerShown: false //this will hide the header
+        },
+    },
+    BarGraph: {
+        screen: BarGraphScreen,
+        navigationOptions: {
+            title: 'Home',
+            headerShown: false //this will hide the header
+        },
+    },
+    Map: {
+        screen: MapScreen,
         navigationOptions: {
             title: 'Home',
             headerShown: false //this will hide the header

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, SafeAreaView, ActivityIndicator, Platform, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
+import { fetchCountryList } from '../redux/actions/CountryList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,7 +18,7 @@ class MapViewScreen extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchCovidCountry_19List(1);
+        this.props.fetchCountryList(1);
     }
 
     setMarkerPosition = (item) => {
@@ -35,20 +35,16 @@ class MapViewScreen extends Component {
     }
 
     render() {
-        const { covidInfo, isLoading } = this.props;
-        const { country } = this.state;
-        console.log({ covidInfo })
-        console.log("State", this.state.country)
-        switch (isLoading) {
+        switch (this.props.isFetching) {
             case true:
                 return <View style={styles.viewParent}>
                     <ActivityIndicator size={'large'} />
                 </View>
             case false:
-                if (covidInfo.length > 0) {
-                    if (country.length == 0) {
+                if (this.props.countryList.length > 0) {
+                    if (this.state.country.length == 0) {
                         this.setState({
-                            country: covidInfo
+                            country: this.props.countryList
                         })
                     }
                 }
@@ -65,7 +61,7 @@ class MapViewScreen extends Component {
                             zoomControlEnabled={true}
                             // minZoomLevel={3}
                             style={styles.map}>
-                            {country.map(item => (
+                            {this.state.country.map(item => (
                                 this.setMarkerPosition(item)
                             ))}
                         </MapView>
@@ -77,15 +73,15 @@ class MapViewScreen extends Component {
 }
 
 function mapStateToProps(state) {
+    const { isFetching, countryList } = state.countryList;
     return {
-        covidInfo: state.covidCountry.covidCountry,
-        isLoading: state.covidCountry.isFetching,
+        isFetching, countryList
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        ...bindActionCreators({ fetchCovidCountry_19List }, dispatch)
+        ...bindActionCreators({ fetchCountryList }, dispatch)
     }
 }
 

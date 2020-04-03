@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import covid from './covid-19';
-import covidCountry from './covid_country-19';
+import country from './country';
 import countryList from './countryList';
 
 const rootReducer = combineReducers({
-    covid, covidCountry, countryList
+    covid, country, countryList
 })
 
 export default rootReducer

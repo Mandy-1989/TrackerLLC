@@ -310,12 +310,12 @@ export default class Map extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <TouchableOpacity style={styles.backIconContainer} onPress={() => this.props.navigation.goBack()}>
-                    <Ionicons name={"ios-arrow-back"} size={40} color={'black'} />
+                    <Ionicons name={"ios-arrow-back"} size={40} color={'white'} />
                 </TouchableOpacity>
                 <MapView
                     //provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
                     provider={PROVIDER_GOOGLE}
-                    mapType={'hybrid'}
+                    // mapType={'hybrid'}
                     customMapStyle={mapStyle}
                     zoomEnabled={true}
                     zoomTapEnabled={true}
