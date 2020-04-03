@@ -23,7 +23,6 @@
 		4BE3106E2431C63F000D2012 /* FiraSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4BE310692431C63F000D2012 /* FiraSans-Medium.ttf */; };
 		B5544B4446EB570DA7BE7772 /* libPods-TrackerLLC-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8051A09FF669081DE325165 /* libPods-TrackerLLC-tvOS.a */; };
 		D97C3EA638C268322B60A8B0 /* libPods-TrackerLLC-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36E510A5953A4CD5E9DB764C /* libPods-TrackerLLC-tvOSTests.a */; };
-		E17126CD2434C6A200A798C5 /* AirGoogleMaps in Resources */ = {isa = PBXBuildFile; fileRef = E17126CC2434C6A200A798C5 /* AirGoogleMaps */; };
 		F305787326F4903113F12176 /* libPods-TrackerLLC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A11B9F6E0D75D59654B7875E /* libPods-TrackerLLC.a */; };
 		F8BDB678678A3077BB3A67C5 /* libPods-TrackerLLCTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C88425A7B2EB18C82104E1D2 /* libPods-TrackerLLCTests.a */; };
 /* End PBXBuildFile section */
@@ -42,13 +41,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "TrackerLLC-tvOS";
-		};
-		E17126D62434CBE800A798C5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E17126D22434CBE800A798C5 /* AirMaps.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
-			remoteInfo = AirMaps;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -98,6 +90,7 @@
 		D21D64C9081348B081DBAFBD /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		D8051A09FF669081DE325165 /* libPods-TrackerLLC-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TrackerLLC-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E17126C92434C03B00A798C5 /* AirMaps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AirMaps; path = "../node_modules/react-native-maps/lib/ios/AirMaps"; sourceTree = "<group>"; };
+
 		E17126CC2434C6A200A798C5 /* AirGoogleMaps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AirGoogleMaps; path = "../node_modules/react-native-maps/lib/ios/AirGoogleMaps"; sourceTree = "<group>"; };
 		E17126D22434CBE800A798C5 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		E1EB01762435AC450099E128 /* libGoogle-Maps-iOS-Utils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libGoogle-Maps-iOS-Utils.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -209,7 +202,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				E17126D22434CBE800A798C5 /* AirMaps.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -217,7 +209,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				E17126CC2434C6A200A798C5 /* AirGoogleMaps */,
 				13B07FAE1A68108700A75B9A /* TrackerLLC */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* TrackerLLCTests */,
@@ -268,14 +259,6 @@
 				46B532576C5C4B0892E35635 /* Zocial.ttf */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		E17126D32434CBE800A798C5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E17126D72434CBE800A798C5 /* libAirMaps.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -400,12 +383,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = E17126D32434CBE800A798C5 /* Products */;
-					ProjectRef = E17126D22434CBE800A798C5 /* AirMaps.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* TrackerLLC */,
@@ -415,16 +392,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		E17126D72434CBE800A798C5 /* libAirMaps.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAirMaps.a;
-			remoteRef = E17126D62434CBE800A798C5 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -445,7 +412,6 @@
 				4BE3106E2431C63F000D2012 /* FiraSans-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				E17126CD2434C6A200A798C5 /* AirGoogleMaps in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
