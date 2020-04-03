@@ -37,8 +37,8 @@ class MapViewScreen extends Component {
     render() {
         const { covidInfo, isLoading } = this.props;
         const { country } = this.state;
-        console.log({covidInfo})
-        console.log("State",this.state.country)
+        console.log({ covidInfo })
+        console.log("State", this.state.country)
         switch (isLoading) {
             case true:
                 return <View style={styles.viewParent}>

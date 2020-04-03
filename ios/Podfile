@@ -55,6 +55,7 @@ target 'TrackerLLC' do
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
+  
 
   target 'TrackerLLCTests' do
     inherit! :search_paths

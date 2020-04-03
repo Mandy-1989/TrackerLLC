@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, SafeAreaView, Dimensions, Platform, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { fetchCovidCountry_19List } from '../redux/actions/Covid_CountryInfo';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
-
-let { width, height } = Dimensions.get('window');
-const ASPECT_RATIO = width / height;
-const LATITUDE = 0;
-const LONGITUDE = 0;
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 var mapStyle = [
     {
@@ -58,6 +48,14 @@ var mapStyle = [
         ]
     },
     {
+        "featureType": "administrative.neighborhood",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
         "featureType": "administrative.province",
         "elementType": "geometry.stroke",
         "stylers": [
@@ -90,6 +88,15 @@ var mapStyle = [
         "stylers": [
             {
                 "color": "#283d6a"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "visibility": "off"
             }
         ]
     },
@@ -135,6 +142,15 @@ var mapStyle = [
         "stylers": [
             {
                 "color": "#304a7d"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
             }
         ]
     },
@@ -239,6 +255,15 @@ var mapStyle = [
     },
     {
         "featureType": "water",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
         "elementType": "labels.text.fill",
         "stylers": [
             {
@@ -287,10 +312,10 @@ export default class Map extends Component {
                 <TouchableOpacity style={styles.backIconContainer} onPress={() => this.props.navigation.goBack()}>
                     <Ionicons name={"ios-arrow-back"} size={40} color={'black'} />
                 </TouchableOpacity>
-                {/* <MapView
+                <MapView
                     //provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
                     provider={PROVIDER_GOOGLE}
-                    mapType={'standard'}
+                    mapType={'hybrid'}
                     customMapStyle={mapStyle}
                     zoomEnabled={true}
                     zoomTapEnabled={true}
@@ -302,13 +327,16 @@ export default class Map extends Component {
                     {this.state.country.map(item => (
                         this.setMarkerPosition(item)
                     ))}
-                </MapView> */}
+                </MapView>
 
-                <MapView
-                    provider={PROVIDER_GOOGLE}
+                {/* <MapView
+                    // provider={PROVIDER_GOOGLE}
                     style={styles.container}
                     customMapStyle={mapStyle}
-                    showsUserLocation={true}
+                    //showsUserLocation={true}
+                    zoomEnabled={true}
+                    zoomTapEnabled={true}
+                    zoomControlEnabled={true}
                     region={this.state.region}
                     onRegionChange={region => this.setState({ region })}
                     onRegionChangeComplete={region => this.setState({ region })}
@@ -316,7 +344,7 @@ export default class Map extends Component {
                     <MapView.Marker
                         coordinate={this.state.region}
                     />
-                </MapView>
+                </MapView> */}
 
 
             </SafeAreaView>
