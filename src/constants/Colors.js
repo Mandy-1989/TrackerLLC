@@ -7,5 +7,7 @@ export default {
     color_5: '#805CEC',
     color_6: '#4D1EB5',
     color_7: '#EC5C5E',
-    color_8: '#2312EE'
+    color_8: '#2312EE',
+    color_9: '#E8FEFF',
+    color_10: '#82D6DD'
 }
