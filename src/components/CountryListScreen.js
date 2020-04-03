@@ -19,7 +19,8 @@ class CountryListScreen extends Component {
         super(props)
         this.state = {
             searchData: '',
-            selectedData: []
+            selectedData: [],
+            searchData: []
         }
         covidName = this.props.navigation.getParam('name')
         total = this.props.navigation.getParam('total')
@@ -27,7 +28,10 @@ class CountryListScreen extends Component {
 
     componentDidMount() {
         this.props.fetchCountryList();
+        this.setState({ selectedData: this.props.countryList, searchData: this.props.countryList })
+
     }
+
     renderCountryItem = ({ item, index }) => {
         let count = covidName === 'CONFIRMED CASES' ? JSON.stringify(item.cases) : (covidName === 'RECOVERED CASES' ? JSON.stringify(item.recovered) : JSON.stringify(item.deaths))
         return (
@@ -52,6 +56,19 @@ class CountryListScreen extends Component {
             height: 0.6
         }} />
     );
+
+    _onSearch = (searchValue) => {
+        const { searchData, selectedData } = this.state
+        if (searchData !== null && searchData !== undefined && searchData !== []) {
+            let data = searchData.filter(function (item) {
+                let type = item.country;
+                return (type.trim().toLowerCase().includes(searchValue.trim().toLowerCase()))
+            });
+
+            this.setState({ selectedData: data })
+        }
+    };
+
     render() {
         switch (this.props.isFetching) {
             case true:
@@ -83,16 +100,21 @@ class CountryListScreen extends Component {
                                 onChangeText={(text) => this._onSearch(text)}
                             />
                         </View>
+                        {this.state.selectedData.length === 0 || this.state.searchData.length === 0 ?
+                            <View style={{ alignSelf: 'center' ,marginTop:StyleConfig.countPixelRatio(50)}}>
+                                <Text style={{ fontFamily: 'firasans-bold',fontSize:20 }}>{'No data found'}</Text>
+                            </View>
+                            :
+                            <View style={{ marginBottom: 50 }}>
+                                <FlatList
+                                    keyExtractor={(item, index) => item.country}
+                                    data={this.state.selectedData}
+                                    renderItem={(index) => this.renderCountryItem(index)}
+                                    ItemSeparatorComponent={this.renderSeparator}
 
-                        <View style={{ marginBottom: 50 }}>
-                            <FlatList
-                                keyExtractor={(item, index) => item.country}
-                                data={this.props.countryList}
-                                renderItem={(index) => this.renderCountryItem(index)}
-                                ItemSeparatorComponent={this.renderSeparator}
-
-                            />
-                        </View>
+                                />
+                            </View>
+                        }
                     </View>
                 )
         }
