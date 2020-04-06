@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
+import { mapStyle } from '../constants/MapStyle'
 
 class MapViewScreen extends Component {
 
@@ -28,8 +29,15 @@ class MapViewScreen extends Component {
         };
 
         return (
-            <Marker coordinate={assetLocations}
-                image={require('../assets/images/pin.png')}
+            // <Marker coordinate={assetLocations}
+            //     image={require('../assets/images/pin.png')}
+            // />
+            <MapView.Circle
+                center={assetLocations}
+                radius={100000}
+                stokeWidth={0.4}
+                strokeColor={'white'}
+                fillColor={'rgba(245, 19, 7,0.4)'}
             />
         )
     }
@@ -55,11 +63,16 @@ class MapViewScreen extends Component {
                             <Ionicons name={"ios-arrow-back"} size={40} color={'black'} />
                         </TouchableOpacity>
                         <MapView provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
-                            mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}
+                            // mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}
                             zoomEnabled={true}
                             zoomTapEnabled={true}
                             zoomControlEnabled={true}
-                            // minZoomLevel={3}
+                            isAccessibilityElement={true}
+                            customMapStyle={mapStyle}
+                            zoomEnabled={true}
+                            zoomTapEnabled={true}
+                            zoomControlEnabled={true}
+                            onRegionChange={this.onRegionChange}
                             style={styles.map}>
                             {this.state.country.map(item => (
                                 this.setMarkerPosition(item)

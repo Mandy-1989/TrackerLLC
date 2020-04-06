@@ -59,6 +59,12 @@ target 'TrackerLLC' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
+  pod 'ReactNativeLocalization', :path => '../node_modules/react-native-localization'
+
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'TrackerLLCTests' do
     inherit! :search_paths
     # Pods for testing
