@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, SafeAreaView, ActivityIndicator, Platform, TouchableOpacity } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { fetchCountryList } from '../redux/actions/CountryList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
 import { mapStyle } from '../constants/MapStyle'
+import MapView from 'react-native-map-clustering'
 
+const INITIAL_REGION = {
+    latitude: 52.5,
+    longitude: 19.2,
+    latitudeDelta: 8.5,
+    longitudeDelta: 8.5
+};
 class MapViewScreen extends Component {
 
     constructor(props) {
@@ -29,16 +36,17 @@ class MapViewScreen extends Component {
         };
 
         return (
-            // <Marker coordinate={assetLocations}
-            //     image={require('../assets/images/pin.png')}
-            // />
-            <MapView.Circle
-                center={assetLocations}
-                radius={100000}
-                stokeWidth={0.4}
-                strokeColor={'white'}
-                fillColor={'rgba(245, 19, 7,0.4)'}
+            <Marker            
+             coordinate={assetLocations}
+                image={require('../assets/images/pin.png')}
             />
+            // <MapView.Circle
+            //     center={assetLocations}
+            //     radius={100000}
+            //     stokeWidth={0.4}
+            //     strokeColor={'white'}
+            //     fillColor={'rgba(245, 19, 7,0.4)'}
+            // />
         )
     }
 
@@ -68,17 +76,14 @@ class MapViewScreen extends Component {
                             zoomTapEnabled={true}
                             zoomControlEnabled={true}
                             isAccessibilityElement={true}
-                            customMapStyle={mapStyle}
-                            zoomEnabled={true}
-                            zoomTapEnabled={true}
-                            zoomControlEnabled={true}
+                            customMapStyle={mapStyle}                          
+                            initialRegion={INITIAL_REGION}
                             onRegionChange={this.onRegionChange}
                             style={styles.map}>
                             {this.state.country.map(item => (
                                 this.setMarkerPosition(item)
                             ))}
                         </MapView>
-
                     </SafeAreaView>
                 )
         }
