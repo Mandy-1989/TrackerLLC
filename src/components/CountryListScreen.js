@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, SafeAreaView } from 'react-native';
 import { fetchCountryList } from '../redux/actions/CountryList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +9,9 @@ import StyleConfig from '../assets/StyleConfig'
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../constants/Colors';
 import BarGraph from './BarGraph';
+import { ButtonGroup } from 'react-native-elements'
+import Colors from '../constants/Colors';
+import { Graph } from './Graph';
 
 let covidName;
 
@@ -21,32 +24,72 @@ class CountryListScreen extends Component {
         this.state = {
             searchData: '',
             selectedData: [],
-            searchData: []
+            searchData: [],
+            List: [],
+            index: 0,
+            data: [],
         }
         covidName = this.props.navigation.getParam('name')
     }
 
-    componentDidMount() {
+    updateIndex = (index) => {
+        this.setState({ index })
+    }
+
+    async componentDidMount() {
         this.props.fetchCountryList();
         this.setState({ selectedData: this.props.countryList, searchData: this.props.countryList })
+
+        await fetch('https://corona.lmao.ninja/v2/historical', {
+            method: 'GET'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // const response = responseJson[index].country == item.country;
+                // this.setState({
+                //     List: responseJson,
+                // })
+            })
     }
 
     renderCountryItem = ({ item, index }) => {
         let count = covidName === 'CONFIRMED CASES' ? JSON.stringify(item.cases) : (covidName === 'RECOVERED CASES' ? JSON.stringify(item.recovered) : JSON.stringify(item.deaths))
         return (
-            <LinearGradient
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                colors={[colors.color_9, colors.color_10]} style={styles.flatlistView}>
+            <TouchableOpacity onPress={() => { this.countryGraph(item, index) }}>
+                <LinearGradient
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    colors={[colors.color_9, colors.color_10]} style={styles.flatlistView}>
 
-                <Image source={{ uri: item.countryInfo.flag }} style={styles.imageStyle} />
-                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginHorizontal: 10 }}>
-                    <Text style={styles.textStyleTwo}>{item.country}</Text>
-                    <Text style={[styles.textStyle, { color: colors.color_2 }]}>{count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
-                </View>
-            </LinearGradient>
+                    <Image source={{ uri: item.countryInfo.flag }} style={styles.imageStyle} />
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginHorizontal: 10 }}>
+                        <Text style={styles.textStyleTwo}>{item.country}</Text>
+                        <Text style={[styles.textStyle, { color: colors.color_2 }]}>{count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                    </View>
+                </LinearGradient>
+            </TouchableOpacity>
         )
     }
+
+    async  countryGraph(item, index) {
+        const countryCode = item.country
+        await fetch('https://corona.lmao.ninja/v2/historical/' + countryCode, {
+            method: 'GET'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // const response = responseJson[index].country == item.country;
+                console.log("ResponceJson", responseJson)
+                // this.setState({
+                //     data: responseJson.timeline.cases
+                // })
+
+            })
+
+    }
+
+
+
 
     renderSeparator = () => (
         <View style={{
@@ -67,6 +110,8 @@ class CountryListScreen extends Component {
         }
     };
 
+
+
     render() {
         switch (this.props.isFetching) {
             case true:
@@ -81,36 +126,51 @@ class CountryListScreen extends Component {
                 }
 
                 return (
-                    <View style={{ flex: 1, backgroundColor: 'white' }}>
-                        <View style={{ height: window.height / 2 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }} >
-                                <TouchableOpacity style={{ padding: 10 }} onPress={() => this.props.navigation.goBack()}>
-                                    <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
-                                </TouchableOpacity>
+                    <SafeAreaView>
+                        <View style={{ flex: 1, backgroundColor: 'white' }}>
+                            <View style={{ height: window.height / 2 }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }} >
+                                    <TouchableOpacity style={{ padding: 10 }} onPress={() => this.props.navigation.goBack()}>
+                                        <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
+                                    </TouchableOpacity>
 
-                                <Ionicons style={{ marginLeft: 10 }}
-                                    name={'ios-search'}
-                                    color={colors.grey}
-                                    size={18} />
+                                    <Ionicons style={{ marginLeft: 10 }}
+                                        name={'ios-search'}
+                                        color={colors.grey}
+                                        size={18} />
 
-                                <TextInput
-                                    placeholder={'Search'}
-                                    style={styles.textInput}
-                                    onChangeText={(text) => this._onSearch(text)}
+                                    <TextInput
+                                        placeholder={'Search'}
+                                        style={styles.textInput}
+                                        onChangeText={(text) => this._onSearch(text)}
+                                    />
+                                </View>
+
+                                <FlatList
+                                    keyExtractor={(item, index) => item.country}
+                                    data={this.state.selectedData}
+                                    renderItem={(index) => this.renderCountryItem(index)}
+                                    ItemSeparatorComponent={this.renderSeparator}
                                 />
                             </View>
+                            <View style={{ height: window.height / 2 }}>
+                                <Graph />
+                                <View style={styles.greyLine}></View>
 
-                            <FlatList
-                                keyExtractor={(item, index) => item.country}
-                                data={this.state.selectedData}
-                                renderItem={(index) => this.renderCountryItem(index)}
-                                ItemSeparatorComponent={this.renderSeparator}
-                            />
+                                <ButtonGroup
+                                    innerBorderStyle={{ width: 20, color: 'white' }}
+                                    onPress={this.updateIndex}
+                                    selectedIndex={this.state.index}
+                                    buttons={['Daily Increase', 'Total Cases']}
+                                    textStyle={styles.textStyle}
+                                    containerStyle={styles.containerStyle}
+                                    selectedButtonStyle={{ backgroundColor: Colors.color_9, height: 25, width: 85, }}
+                                    selectedTextStyle={{ color: 'black', fontSize: 11 }}
+                                />
+
+                            </View>
                         </View>
-                        <View style={{ height: window.height / 2 }}>
-                            <BarGraph></BarGraph>
-                        </View>
-                    </View>
+                    </SafeAreaView>
                 )
         }
     }
@@ -149,7 +209,34 @@ const styles = StyleSheet.create({
         padding: 10,
         fontFamily: 'FiraSans-Regular',
         fontSize: 18
-    }
+    },
+    greyLine: {
+        marginTop: 7,
+        width: Dimensions.get('window').width - 30,
+        alignSelf: 'center',
+        height: 1,
+        backgroundColor: 'grey'
+    },
+    textStyle: {
+        color: 'darkgrey',
+        fontSize: 11,
+        borderWidth: 0.7,
+        borderColor: 'black',
+        height: 25,
+        width: 85,
+        textAlign: 'center',
+        backgroundColor: Colors.color_9,
+        paddingTop: 5
+    },
+    containerStyle: {
+        height: 25,
+        width: 200,
+        marginLeft: 15,
+        borderWidth: 0,
+        borderColor: 'white',
+        top: -5
+    },
+
 })
 
 function mapStateToProps(state) {
