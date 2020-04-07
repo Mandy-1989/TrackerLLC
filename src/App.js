@@ -12,10 +12,15 @@ import BarGraphScreen from "./components/BarGraph";
 import MapScreen from "./components/Map";
 import TabNavigatorScreen from "./components/TabNavigator";
 import { setNavigator } from './components/navigator';
+import Splash from 'react-native-splash-screen';
 
 const store = configureStore()
 
 export default class App extends Component {
+    componentDidMount() {
+        Splash.hide()
+    }
+
     render() {
         return <Provider store={store}>
             <AppContainer ref={nav => setNavigator(nav)} />
