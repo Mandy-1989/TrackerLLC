@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
 import { fetchCountryData } from '../redux/actions/CountryInfo';
+import { fetchCountryList} from '../redux/actions/CountryList';
+import { fetchUsaStateData } from '../redux/actions/UsaStateList';
 import AppImages from '../assets/images';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../components/navigator';
@@ -19,6 +21,8 @@ class Dashboard extends Component {
     componentDidMount() {
         this.props.fetchCovid_19List();
         this.props.fetchCountryData();
+        this.props.fetchCountryList();
+        this.props.fetchUsaStateData();
     }
 
     onClick = (clickType) => {
@@ -36,23 +40,23 @@ class Dashboard extends Component {
     onCasesPressed = (title, count) => {
         navigate('CountryListScreen', { name: title, total: count })
     }
-
+    onUSAPressed(){
+        navigate('CountryListScreen', { item : true})
+    }
     render() {
+        const { covid, countryInfo } = this.props
+        USATotalCases = countryInfo && countryInfo !== undefined && countryInfo.length !== 0 && countryInfo !== null ? JSON.stringify(this.props.countryInfo.cases) : null;
+        USATotalDeaths = countryInfo && countryInfo !== undefined && countryInfo.length !== 0 && countryInfo !== null ? JSON.stringify(this.props.countryInfo.deaths) : null;
+
         switch (this.props.isFetching) {
             case true:
                 return <View style={styles.viewLoader}>
                     <ActivityIndicator size={'large'} />
                 </View>
             case false:
-                let confirmed = JSON.stringify(this.props.covid.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let recovered = JSON.stringify(this.props.covid.recovered).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                let deaths = JSON.stringify(this.props.covid.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                if (this.props.countryInfo) {
-                    USATotalCases = JSON.stringify(this.props.countryInfo.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    USATotalDeaths = JSON.stringify(this.props.countryInfo.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                }
-
+                let confirmed = covid && covid !== undefined && covid.length !== 0 && covid !== null ? JSON.stringify(this.props.covid.cases).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
+                let recovered = covid && covid !== undefined && covid.length !== 0 && covid !== null ? JSON.stringify(this.props.covid.recovered).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
+                let deaths = covid && covid !== undefined && covid.length !== 0 && covid !== null ? JSON.stringify(this.props.covid.deaths).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
                 return (
                     <SafeAreaView style={styles.viewParent} >
                         <View style={{ flex: 1, margin: 10 }}>
@@ -70,18 +74,19 @@ class Dashboard extends Component {
                                     end={{ x: 1, y: 0 }}
                                     colors={[colors.color_7, colors.color_8]}
                                     style={[styles.infoCard, { paddingVertical: 5 }]} >
-
-                                    <Text style={styles.txtCountry}>{string.str_unitedStatus}</Text>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View>
-                                            <Text style={styles.txtTitle}>{string.str_total_cases}</Text>
-                                            <Text style={styles.txtSubTitle}>{USATotalCases}</Text>
+                                    <TouchableOpacity onPress={()=>this.onUSAPressed()}>
+                                        <Text style={styles.txtCountry}>{string.str_unitedStatus}</Text>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <View>
+                                                <Text style={styles.txtTitle}>{string.str_total_cases}</Text>
+                                                <Text style={styles.txtSubTitle}>{USATotalCases && USATotalCases !== undefined ? USATotalCases.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null}</Text>
+                                            </View>
+                                            <View>
+                                                <Text style={styles.txtTitle}>{string.str_total_death}</Text>
+                                                <Text style={styles.txtSubTitle}>{USATotalDeaths && USATotalDeaths !== undefined ? USATotalDeaths.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null}</Text>
+                                            </View>
                                         </View>
-                                        <View>
-                                            <Text style={styles.txtTitle}>{string.str_total_death}</Text>
-                                            <Text style={styles.txtSubTitle}>{USATotalDeaths}</Text>
-                                        </View>
-                                    </View>
+                                    </TouchableOpacity>
                                 </LinearGradient>
 
                                 <LinearGradient start={{ x: 0, y: 0 }}
@@ -126,14 +131,16 @@ class Dashboard extends Component {
 function mapStateToProps(state) {
     const { isFetching, covid } = state.covid
     const { countryInfo } = state.country
+    const { usaStateList } = state.usaStateList;
+
     return {
-        isFetching, covid, countryInfo
+        isFetching, covid, countryInfo,usaStateList
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        ...bindActionCreators({ fetchCovid_19List, fetchCountryData }, dispatch)
+        ...bindActionCreators({ fetchCovid_19List,fetchUsaStateData, fetchCountryData ,fetchCountryList}, dispatch)
     }
 }
 

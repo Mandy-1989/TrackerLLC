@@ -32,6 +32,51 @@ export default class Map extends Component {
                 image={require('../assets/images/pin.png')}
             />
         )
+        // if (parseInt(item.cases) > 20000 || parseInt(item.cases) == 20000) {
+        //     return (
+        //         <MapView.Circle
+        //             center={LATLNG}
+        //             radius={100000}
+        //             stokeWidth={0.4}
+        //             strokeColor={'white'}
+        //             fillColor={'rgba(245, 19, 7,0.5)'}
+        //         />
+        //     )
+        // } else
+        //     if (parseInt(item.cases) < 20000 || parseInt(item.cases) == 20000) {
+        //         return (
+        //             <MapView.Circle
+        //                 center={LATLNG}
+        //                 radius={80000}
+        //                 stokeWidth={0.4}
+        //                 strokeColor={'white'}
+        //                 fillColor={'rgba(245, 19, 7,0.4)'}
+        //             />
+        //         )
+        //     } else
+        //         if (parseInt(item.cases) < 10000 && parseInt(item.cases) > 5000) {
+        //             return (
+        //                 <MapView.Circle
+        //                     center={LATLNG}
+        //                     radius={60000}
+        //                     stokeWidth={0.4}
+        //                     strokeColor={'white'}
+        //                     fillColor={'rgba(245, 19, 7,0.3)'}
+        //                 />
+        //             )
+        //         } else
+        //             if (parseInt(item.cases) == 5000 || parseInt(item.cases) < 5000) {
+        //                 return (
+        //                     <MapView.Circle
+        //                         center={LATLNG}
+        //                         radius={40000}
+        //                         stokeWidth={0}
+        //                         strokeColor={'white'}
+        //                         fillColor={'rgba(245, 19, 7,0.2)'}
+        //                     />
+        //                 )
+        //             }
+
     }
 
     render() {
@@ -57,24 +102,6 @@ export default class Map extends Component {
                         this.setMarkerPosition(item)
                     ))}
                 </MapView>
-
-                {/* <MapView
-                    // provider={PROVIDER_GOOGLE}
-                    style={styles.container}
-                    customMapStyle={mapStyle}
-                    //showsUserLocation={true}
-                    zoomEnabled={true}
-                    zoomTapEnabled={true}
-                    zoomControlEnabled={true}
-                    region={this.state.region}
-                    onRegionChange={region => this.setState({ region })}
-                    onRegionChangeComplete={region => this.setState({ region })}
-                >
-                    <MapView.Marker
-                        coordinate={this.state.region}
-                    />
-                </MapView> */}
-
 
             </SafeAreaView>
         )

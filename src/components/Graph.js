@@ -10,26 +10,26 @@ import { BarChart, XAxis, Grid, YAxis } from 'react-native-svg-charts'
 
 const fill = 'rgb(78, 66, 245)'
 const data = [20, 55, 59, 59, 25, 29, 25, 29, 35, 45, 55, 59, 59, 25, 29, 35, 45, 55, 59, 59, 25, 29, 35, 45, 55, 59, 59]
-const contentInset = { top: 5, bottom: 0 }
+const contentInset = { top: 5, bottom: 5, }
 
 
 export const Graph = (props) =>
-
-    <View style={{ marginTop: 20 }}>
+    <View>
         <View
             style={style.graphContainer}>
             <YAxis
                 style={style.yAxisStyle}
-                data={data}
+                data={props.data}
                 contentInset={contentInset}
                 svg={{ fill: 'grey', fontSize: 11, }}
                 numberOfTicks={3}
-                formatLabel={value => `${value} K`}
+                formatLabel={value => `${value}`}
             />
             <View style={style.verticleLine}></View>
             <BarChart
+                spacingInner={0.60}
                 style={style.barChart}
-                data={data}
+                data={props.data}
                 svg={{ fill }}
                 numberOfTicks={3}
                 contentInset={{ top: 0, bottom: 0 }}
@@ -39,21 +39,16 @@ export const Graph = (props) =>
             </BarChart>
         </View>
         <View style={style.horizontalLine}></View>
-
-        {/* <View style={{
-            flexDirection: 'row',
-            width: Dimensions.get('window').width - 50,
-            alignSelf: 'center',
-            justifyContent: 'space-around'
-        }}>
-            <Text style={style.monthText}>Mar</Text>
-            <Text style={style.monthText}>Apr</Text>
-        </View> */}
-
         <XAxis
-            style={{ marginHorizontal: -10, width: Dimensions.get('window').width - 50, alignSelf: 'center' }}
-            data={data}
-            formatLabel={(value, index) => value}
+            style={{
+                marginTop: 5,
+                marginLeft: 55,
+                width: Dimensions.get('window').width - 100,
+                alignSelf: 'center'
+            }}
+            data={props.data}
+            xAccessor={props.xAccessor}
+            formatLabel={props.formatLabel}
             contentInset={{ left: 10, right: 10 }}
             svg={{ fontSize: 10, fill: 'black' }}
         />
@@ -73,11 +68,13 @@ const style = StyleSheet.create({
 
     },
     yAxisStyle: {
-        width: 30,
+        width: 50,
+        paddingLeft: 3,
+        paddingRight: 3,
         height: 200,
-        alignItems: 'flex-start',
+        alignItems: 'flex-end',
+        textAlign: 'right'
         // backgroundColor: 'yellow'
-
     },
     verticleLine: {
         width: 1,
@@ -87,7 +84,7 @@ const style = StyleSheet.create({
     barChart: {
         paddingTop: 5,
         height: 200,
-        width: Dimensions.get('window').width - 70,
+        width: Dimensions.get('window').width - 100,
 
     },
 
