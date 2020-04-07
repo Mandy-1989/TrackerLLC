@@ -16,10 +16,11 @@ class MapViewScreen extends Component {
         this.state = {
             country: []
         }
+        // console.log("isFromTab:" + this.props.navigation.state.params.isFromTab)
     }
 
     componentDidMount() {
-        this.props.fetchCountryList(1);
+        this.props.fetchCountryList();
     }
 
     setMarkerPosition = (item) => {
@@ -60,7 +61,7 @@ class MapViewScreen extends Component {
                 return (
                     <SafeAreaView style={styles.container}>
                         <TouchableOpacity style={styles.backIconContainer} onPress={() => this.props.navigation.goBack()}>
-                            <Ionicons name={"ios-arrow-back"} size={40} color={'black'} />
+                            <Ionicons name={"ios-arrow-back"} size={26} color={'white'} />
                         </TouchableOpacity>
                         <MapView provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
                             // mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}

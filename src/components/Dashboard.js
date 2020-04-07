@@ -31,7 +31,7 @@ class Dashboard extends Component {
 
     setMapIcon = () => {
         return <TouchableOpacity style={{ position: 'absolute', right: 0, alignItems: 'center' }}
-            onPress={() => navigate('Map', { item: true })}  >
+            onPress={() => navigate('MapViewScreen', { isFromTab: false })}  >
             <Image source={AppImages.earth_GIF}
                 style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
         </TouchableOpacity>

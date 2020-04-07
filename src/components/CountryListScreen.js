@@ -104,7 +104,7 @@ class CountryListScreen extends Component {
                     <View style={{ flex: 1, backgroundColor: 'white' }}>
                         <View>
                             <View style={{ height: window.height / 2 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 50 }} >
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }} >
                                     <TouchableOpacity style={{ padding: 10, maringTop: StyleConfig.countPixelRatio(20) }} onPress={() => this.props.navigation.goBack()}>
                                         <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
                                     </TouchableOpacity>

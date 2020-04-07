@@ -9,20 +9,11 @@ import News from './News';
 import FAQ from './FAQ';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Styleconfig from '../assets/StyleConfig'
-import StyleConfig from '../assets/StyleConfig';
 function MyTabBar({ state, descriptors, navigation }) {
     return (
         <View style={{ flexDirection: 'row' }}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
-                // const icon =
-                //     options.tabBarLabel !== undefined
-                //         ? options.tabBarLabel
-                //         : options.title !== undefined
-                //             ? options.title
-                //             : route.name;
-
                 const icon = route.name;
                 const isFocused = state.index === index;
 
@@ -33,16 +24,15 @@ function MyTabBar({ state, descriptors, navigation }) {
                     });
 
                     if (!isFocused && !event.defaultPrevented) {
-                        navigation.navigate(route.name);
+
+                        if (route.name == 'globe') {
+                            navigation.navigate(route.name, { isFromTab: true });
+                        }
+                        else {
+                            navigation.navigate(route.name);
+                        }
                     }
                 };
-
-                // const onLongPress = () => {
-                //     navigation.emit({
-                //         type: 'tabLongPress',
-                //         target: route.key,
-                //     });
-                // };
 
                 return (
                     <TouchableOpacity
@@ -51,11 +41,11 @@ function MyTabBar({ state, descriptors, navigation }) {
                         accessibilityLabel={options.tabBarAccessibilityLabel}
                         testID={options.tabBarTestID}
                         onPress={onPress}
-                        style={{ flex: 1, paddingVertical: StyleConfig.countPixelRatio(16) }}>
+                        style={{ flex: 1, paddingVertical: 10 }}>
                         {
                             icon == 'questioncircleo' ?
-                                <AntDesign style={{ alignSelf: 'center' }} name={icon} size={30} color={isFocused ? '#673ab7' : '#222'} /> :
-                                <Entypo style={{ alignSelf: 'center' }} name={icon} size={30} color={isFocused ? '#673ab7' : '#222'} />
+                                <AntDesign style={{ alignSelf: 'center' }} name={icon} size={24} color={isFocused ? '#673ab7' : '#222'} /> :
+                                <Entypo style={{ alignSelf: 'center' }} name={icon} size={22} color={isFocused ? '#673ab7' : '#222'} />
                         }
                     </TouchableOpacity>
                 );
