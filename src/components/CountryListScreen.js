@@ -128,9 +128,6 @@ class CountryListScreen extends Component {
                             })
                         )
                 })
-
-
-
     }
 
     renderSeparator = () => (
@@ -198,7 +195,6 @@ class CountryListScreen extends Component {
                                 <View style={{ height: window.height / 2, }}>
 
                                     <Text style={styles.countryName}>{this.state.countryName}</Text>
-
                                     <View style={{ height: 220 }}>
                                         <Graph
                                             data={this.state.data}
