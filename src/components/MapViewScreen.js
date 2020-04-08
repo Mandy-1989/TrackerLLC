@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, SafeAreaView, ActivityIndicator, Platform, TouchableOpacity } from 'react-native';
-import { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { fetchCountryList } from '../redux/actions/CountryList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
 import { mapStyle } from '../constants/MapStyle'
-import MapView from 'react-native-map-clustering'
 
 const INITIAL_REGION = {
     latitude: 52.5,
@@ -26,29 +25,136 @@ class MapViewScreen extends Component {
         // console.log("isFromTab:" + this.props.navigation.state.params.isFromTab)
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.fetchCountryList();
+        await fetch('https://corona.lmao.ninja/countries', {
+            method: 'GET'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    country: responseJson
+                })
+            }
+            )
+
+        // await fetch('https://corona.lmao.ninja/states', {
+        //     method: 'GET'
+        // })
+        //     .then((response) => response.json())
+        //     .then((responseJson) => {
+        //     }
+        //     )
     }
 
     setMarkerPosition = (item) => {
-        const assetLocations = {
-            latitude: parseFloat(item.countryInfo.lat),
-            longitude: parseFloat(item.countryInfo.long)
+        var lat = item.countryInfo.lat
+        var long = item.countryInfo.long
+        const LATLNG = {
+            latitude: parseFloat(lat),
+            longitude: parseFloat(long)
         };
+        // return (
+        //     // <Marker
+        //     //  coordinate={assetLocations}
+        //     //     image={require('../assets/images/pin.png')}
+        //     <MapView.Circle
+        //         center={assetLocations}
+        //         radius={100000}
+        //         stokeWidth={0.4}
+        //         strokeColor={'white'}
+        //         fillColor={'rgba(245, 19, 7,0.4)'}
+        //     />
+        // )
+        if ((parseInt(item.cases) > 1000000 && parseInt(item.cases) < 10000000) || parseInt(item.cases) == 10000000) {
+            return (
+                <MapView.Circle
+                    center={LATLNG}
+                    radius={3000000}
+                    stokeWidth={0.4}
+                    strokeColor={'white'}
+                    fillColor={'rgba(245, 19, 7,0.7)'}
+                />
+            )
+        } else
+            if ((parseInt(item.cases) > 300000 && parseInt(item.cases) < 1000000) || parseInt(item.cases) == 1000000) {
+                return (
+                    <MapView.Circle
+                        center={LATLNG}
+                        radius={1000000}
+                        stokeWidth={0.4}
+                        strokeColor={'white'}
+                        fillColor={'rgba(245, 19, 7,0.5)'}
+                    />
+                )
+            } else
+                if ((parseInt(item.cases) > 100000 && parseInt(item.cases) < 300000) || parseInt(item.cases) == 300000) {
+                    return (
+                        <MapView.Circle
+                            center={LATLNG}
+                            radius={750000}
+                            stokeWidth={0.4}
+                            strokeColor={'white'}
+                            fillColor={'rgba(245, 19, 7,0.5)'}
+                        />
+                    )
+                } else
+                    if ((parseInt(item.cases) > 50000 && parseInt(item.cases) < 100000) || parseInt(item.cases) == 100000) {
+                        return (
+                            <MapView.Circle
+                                center={LATLNG}
+                                radius={400000}
+                                stokeWidth={0.4}
+                                strokeColor={'white'}
+                                fillColor={'rgba(245, 19, 7,0.5)'}
+                            />
+                        )
+                    } else
+                        if ((parseInt(item.cases) > 20000 && parseInt(item.cases) < 50000) || parseInt(item.cases) == 50000) {
+                            return (
+                                <MapView.Circle
+                                    center={LATLNG}
+                                    radius={300000}
+                                    stokeWidth={0.4}
+                                    strokeColor={'white'}
+                                    fillColor={'rgba(245, 19, 7,0.5)'}
+                                />
+                            )
+                        } else
+                            if (parseInt(item.cases) < 20000 || parseInt(item.cases) == 20000) {
+                                return (
+                                    <MapView.Circle
+                                        center={LATLNG}
+                                        radius={200000}
+                                        stokeWidth={0.4}
+                                        strokeColor={'white'}
+                                        fillColor={'rgba(245, 19, 7,0.4)'}
+                                    />
+                                )
+                            } else
+                                if (parseInt(item.cases) < 10000 && parseInt(item.cases) > 5000) {
+                                    return (
+                                        <MapView.Circle
+                                            center={LATLNG}
+                                            radius={100000}
+                                            stokeWidth={0.4}
+                                            strokeColor={'white'}
+                                            fillColor={'rgba(245, 19, 7,0.3)'}
+                                        />
+                                    )
+                                } else
+                                    if (parseInt(item.cases) == 5000 || parseInt(item.cases) < 5000) {
+                                        return (
+                                            <MapView.Circle
+                                                center={LATLNG}
+                                                radius={50000}
+                                                stokeWidth={0}
+                                                strokeColor={'white'}
+                                                fillColor={'rgba(245, 19, 7,0.2)'}
+                                            />
+                                        )
+                                    }
 
-        return (
-            <Marker
-                coordinate={assetLocations}
-                image={require('../assets/images/pin.png')}
-            />
-            // <MapView.Circle
-            //     center={assetLocations}
-            //     radius={100000}
-            //     stokeWidth={0.4}
-            //     strokeColor={'white'}
-            //     fillColor={'rgba(245, 19, 7,0.4)'}
-            // />
-        )
     }
 
     render() {
