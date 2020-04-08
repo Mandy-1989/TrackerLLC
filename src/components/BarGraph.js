@@ -1,18 +1,18 @@
 import React from 'react'
 import { BarChart, XAxis, Grid, YAxis } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
-import { SafeAreaView, View, Dimensions, StyleSheet } from 'react-native'
+import { SafeAreaView, View, Dimensions, StyleSheet, Text } from 'react-native'
 
 export default class BarGraph extends React.PureComponent {
 
     render() {
         const fill = 'rgb(78, 66, 245)'
-        const data = [null, null, 20, null, null, 40, null, 60, null, 15, null, 25, 29, 35, 45, 55, 59, 59, 25, 29, 35, 45, 55, 59, 59, 25, 29, 35, 45, 55, 59, 59]
+        const data = [20, 40, 60, 15, 25, 29, 35, 45, 55, 59, 59, 25, 29, 35, 45, 55, 59, 59, 25, 29, 35, 45, 55, 59, 59]
         const contentInset = { top: 5, bottom: 0 }
-        const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Navember", "December"]
+
         return (
             <SafeAreaView>
-                <View style={{ marginTop: 50 }}>
+                <View style={{ marginTop: 20 }}>
                     <View
                         style={style.graphContainer}>
                         <YAxis
@@ -35,13 +35,24 @@ export default class BarGraph extends React.PureComponent {
                         </BarChart>
                     </View>
                     <View style={style.horizontalLine}></View>
-                    {/* <XAxis
-                        style={style.xAxis}
-                        data={month}
-                        formatLabel={(value, index) => value}
+
+                    {/* <View style={{
+                        flexDirection: 'row',
+                        width: Dimensions.get('window').width - 50,
+                        alignSelf: 'center',
+                        justifyContent: 'space-around'
+                    }}>
+                        <Text style={style.monthText}>Mar</Text>
+                        <Text style={style.monthText}>Apr</Text>
+                    </View> */}
+
+                    <XAxis
+                        style={{ marginHorizontal: -10, width: Dimensions.get('window').width - 50, alignSelf: 'center' }}
+                        data={data}
+                        formatLabel={(value, index) => index}
                         contentInset={{ left: 10, right: 10 }}
-                        svg={{ fontSize: 10, fill: 'blue', }}
-                    /> */}
+                        svg={{ fontSize: 10, fill: 'black' }}
+                    />
 
                 </View>
             </SafeAreaView>
@@ -85,8 +96,15 @@ const style = StyleSheet.create({
         alignSelf: 'center'
     },
     xAxis: {
+        width: '90%',
+        height: 50,
         marginLeft: 50,
         alignItems: 'center',
         //  backgroundColor: "green"
+    },
+    monthText: {
+        paddingTop: 5,
+        color: 'grey',
+        fontSize: 12
     }
 })

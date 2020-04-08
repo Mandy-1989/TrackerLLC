@@ -37,11 +37,9 @@ class MapViewScreen extends Component {
         };
 
         return (
-            // <Marker            
+            // <Marker
             //  coordinate={assetLocations}
             //     image={require('../assets/images/pin.png')}
-            // />
-
             <MapView.Circle
                 center={assetLocations}
                 radius={100000}
@@ -72,24 +70,21 @@ class MapViewScreen extends Component {
                         <TouchableOpacity style={styles.backIconContainer} onPress={() => this.props.navigation.goBack()}>
                             <Ionicons name={"ios-arrow-back"} size={26} color={'white'} />
                         </TouchableOpacity>
-                        <MapViewCluster provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
+                        <MapView provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null}
+                            // mapType={Platform.OS === 'android' ? 'terrain' : 'standard'}
                             zoomEnabled={true}
                             zoomTapEnabled={true}
                             zoomControlEnabled={true}
                             isAccessibilityElement={true}
                             customMapStyle={mapStyle}
-                            showsUserLocation={true}
                             initialRegion={INITIAL_REGION}
-                            // onRegionChange={this.onRegionChange}
+                            onRegionChange={this.onRegionChange}
                             style={styles.map}>
 
-                            {
-                                this.state.country.map(item => (
-                                    this.setMarkerPosition(item)
-                                ))
-                            }
-
-                        </MapViewCluster>
+                            {this.state.country.map(item => (
+                                this.setMarkerPosition(item)
+                            ))}
+                        </MapView>
                     </SafeAreaView>
                 )
         }
