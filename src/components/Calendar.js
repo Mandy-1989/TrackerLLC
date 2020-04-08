@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text, Image, ActivityIndicator, SafeAreaView } from 'react-native';
 import AppImages from '../assets/images';
 import { WebView } from 'react-native-webview';
-import StyleConfig from '../assets/StyleConfig'
+import StyleConfig from '../assets/StyleConfig';
+import colors from '../constants/Colors';
 
 export default class WebLink extends Component {
     constructor(props) {
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlignVertical: 'center',
         marginLeft: 5,
+        color: colors.grey,
         fontFamily: 'FiraSans-Medium'
     }
 })

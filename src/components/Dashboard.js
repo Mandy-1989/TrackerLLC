@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
 import { fetchCountryData } from '../redux/actions/CountryInfo';
-import { fetchCountryList} from '../redux/actions/CountryList';
+import { fetchCountryList } from '../redux/actions/CountryList';
 import { fetchUsaStateData } from '../redux/actions/UsaStateList';
 import AppImages from '../assets/images';
 import LinearGradient from 'react-native-linear-gradient';
@@ -31,7 +31,7 @@ class Dashboard extends Component {
 
     setMapIcon = () => {
         return <TouchableOpacity style={{ position: 'absolute', right: 0, alignItems: 'center' }}
-            onPress={() => navigate('MapViewScreen', { isFromTab: false })}  >
+            onPress={() => navigate('Map')}  >
             <Image source={AppImages.earth_GIF}
                 style={{ height: 80, width: 80, paddingHorizontal: 5, marginVertical: 20 }} />
         </TouchableOpacity>
@@ -40,8 +40,8 @@ class Dashboard extends Component {
     onCasesPressed = (title, count) => {
         navigate('CountryListScreen', { name: title, total: count })
     }
-    onUSAPressed(){
-        navigate('CountryListScreen', { item : true})
+    onUSAPressed() {
+        navigate('CountryListScreen', { item: true })
     }
     render() {
         const { covid, countryInfo } = this.props
@@ -74,7 +74,7 @@ class Dashboard extends Component {
                                     end={{ x: 1, y: 0 }}
                                     colors={[colors.color_7, colors.color_8]}
                                     style={[styles.infoCard, { paddingVertical: 5 }]} >
-                                    <TouchableOpacity onPress={()=>this.onUSAPressed()}>
+                                    <TouchableOpacity onPress={() => this.onUSAPressed()}>
                                         <Text style={styles.txtCountry}>{string.str_unitedStatus}</Text>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                             <View>
@@ -134,13 +134,13 @@ function mapStateToProps(state) {
     const { usaStateList } = state.usaStateList;
 
     return {
-        isFetching, covid, countryInfo,usaStateList
+        isFetching, covid, countryInfo, usaStateList
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        ...bindActionCreators({ fetchCovid_19List,fetchUsaStateData, fetchCountryData ,fetchCountryList}, dispatch)
+        ...bindActionCreators({ fetchCovid_19List, fetchUsaStateData, fetchCountryData, fetchCountryList }, dispatch)
     }
 }
 
