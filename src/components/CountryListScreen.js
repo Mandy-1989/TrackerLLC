@@ -12,7 +12,7 @@ import BarGraph from './BarGraph';
 import { ButtonGroup } from 'react-native-elements'
 import Colors from '../constants/Colors';
 import { Graph } from './Graph';
-import { DATE, label } from './Moment'
+import { DATE, label, label1 } from './Moment'
 import { Graph1 } from './TabGraph';
 
 let covidName;
@@ -34,6 +34,7 @@ class CountryListScreen extends Component {
             date: new Date(),
             countryName: '',
             data2: [null, label.ten, label.nine, label.eightth, label.seventh, label.sixth, label.fifth, label.fourth, label.third, label.second, label.first, null],
+            data3: [null, label1.ten, label1.nine, label1.eightth, label1.seventh, label1.sixth, label1.fifth, label1.fourth, label1.third, label1.second, label1.first, null],
             cases: '',
             recovered: '',
             deaths: '',
@@ -216,6 +217,7 @@ class CountryListScreen extends Component {
                                     <Graph
                                         data={this.state.data}
                                         formatLabel={(value, index) => this.state.data2[index]}
+                                        formatLabel1={(value, index) => this.state.data3[index]}
                                     />
                                 }
                                 {this.state.index == 1 &&

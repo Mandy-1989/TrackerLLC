@@ -23,7 +23,7 @@ export const Graph = (props) =>
                 contentInset={contentInset}
                 svg={{ fill: 'grey', fontSize: 11, }}
                 numberOfTicks={3}
-                formatLabel={value => `${value}`}
+                formatLabel={value => `${value.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}`}
             />
             <View style={style.verticleLine}></View>
             <BarChart
@@ -52,6 +52,19 @@ export const Graph = (props) =>
             contentInset={{ left: 10, right: 10 }}
             svg={{ fontSize: 10, fill: 'black' }}
         />
+        <XAxis
+            style={{
+                marginTop: -5,
+                marginLeft: 55,
+                width: Dimensions.get('window').width - 100,
+                alignSelf: 'center'
+            }}
+            data={props.data}
+            xAccessor={props.xAccessor}
+            formatLabel={props.formatLabel1}
+            contentInset={{ left: 10, right: 10 }}
+            svg={{ fontSize: 7, fill: 'black' }}
+        />
 
     </View>
 
@@ -60,7 +73,7 @@ export const Graph = (props) =>
 
 const style = StyleSheet.create({
     graphContainer: {
-        width: Dimensions.get('window').width - 50,
+        width: Dimensions.get('window').width - 30,
         height: 200,
         flexDirection: 'row',
         alignItems: 'center',
@@ -68,7 +81,7 @@ const style = StyleSheet.create({
 
     },
     yAxisStyle: {
-        width: 50,
+        width: 70,
         paddingLeft: 3,
         paddingRight: 3,
         height: 200,
@@ -100,7 +113,7 @@ const style = StyleSheet.create({
         height: 50,
         marginLeft: 50,
         alignItems: 'center',
-        //  backgroundColor: "green"
+        backgroundColor: "green"
     },
     monthText: {
         paddingTop: 5,

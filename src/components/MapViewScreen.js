@@ -259,7 +259,7 @@ class MapViewScreen extends Component {
                             zoomControlEnabled={true}
                             isAccessibilityElement={true}
                             customMapStyle={mapStyle}
-                            initialRegion={this.state.region}
+                            //initialRegion={this.state.region}
                             onRegionChange={this.onRegionChange}
                             style={styles.map}>
                             {this.state.country.map((item, index) => (
