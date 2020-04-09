@@ -17,7 +17,7 @@ import { Graph1 } from './TabGraph';
 
 let covidName;
 let usacountry;
-const window = Dimensions.get('window')
+// const window = Dimensions.get('window')
 
 class CountryListScreen extends Component {
 
@@ -95,6 +95,7 @@ class CountryListScreen extends Component {
     }
 
     async  countryGraph(item, index) {
+        // alert("Item:" + JSON.stringify(item))
         this.setState({
             countryName: item.country,
             cases: item.cases,
@@ -171,7 +172,7 @@ class CountryListScreen extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
-                    <View style={{ height: window.height / 2 }}>
+                    <View style={{ flex: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }} >
                             <TouchableOpacity style={{ padding: 10, maringTop: StyleConfig.countPixelRatio(20) }} onPress={() => this.props.navigation.goBack()}>
                                 <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
@@ -197,7 +198,7 @@ class CountryListScreen extends Component {
                         />
                     </View>
 
-                    <View style={{ height: window.height / 2, backgroundColor: 'white', }}>
+                    <View style={{ backgroundColor: 'white', }}>
 
                         <Text style={styles.countryName}>{this.state.countryName}</Text>
                         {usacountry ?
