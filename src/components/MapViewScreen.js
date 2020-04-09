@@ -58,7 +58,7 @@ class MapViewScreen extends Component {
             return (
                 <MapView.Circle
                     center={LATLNG}
-                    radius={3000000}
+                    radius={800000}
                     stokeWidth={0.4}
                     strokeColor={'white'}
                     fillColor={'rgba(245, 19, 7,0.7)'}
@@ -69,7 +69,7 @@ class MapViewScreen extends Component {
                 return (
                     <MapView.Circle
                         center={LATLNG}
-                        radius={1000000}
+                        radius={600000}
                         stokeWidth={0.4}
                         strokeColor={'white'}
                         fillColor={'rgba(245, 19, 7,0.5)'}
@@ -80,7 +80,7 @@ class MapViewScreen extends Component {
                     return (
                         <MapView.Circle
                             center={LATLNG}
-                            radius={750000}
+                            radius={500000}
                             stokeWidth={0.4}
                             strokeColor={'white'}
                             fillColor={'rgba(245, 19, 7,0.5)'}
@@ -167,7 +167,7 @@ class MapViewScreen extends Component {
                 return (
                     <MapView.Circle
                         center={LATLNG}
-                        radius={640000}
+                        radius={400000}
                         stokeWidth={0.4}
                         strokeColor={'white'}
                         fillColor={'rgba(245, 19, 7,0.5)'}
@@ -178,7 +178,7 @@ class MapViewScreen extends Component {
                     return (
                         <MapView.Circle
                             center={LATLNG}
-                            radius={320000}
+                            radius={300000}
                             stokeWidth={0.4}
                             strokeColor={'white'}
                             fillColor={'rgba(245, 19, 7,0.5)'}
@@ -189,7 +189,7 @@ class MapViewScreen extends Component {
                         return (
                             <MapView.Circle
                                 center={LATLNG}
-                                radius={160000}
+                                radius={200000}
                                 stokeWidth={0.4}
                                 strokeColor={'white'}
                                 fillColor={'rgba(245, 19, 7,0.5)'}
@@ -200,7 +200,7 @@ class MapViewScreen extends Component {
                             return (
                                 <MapView.Circle
                                     center={LATLNG}
-                                    radius={80000}
+                                    radius={100000}
                                     stokeWidth={0.4}
                                     strokeColor={'white'}
                                     fillColor={'rgba(245, 19, 7,0.4)'}
@@ -211,7 +211,7 @@ class MapViewScreen extends Component {
                                 return (
                                     <MapView.Circle
                                         center={LATLNG}
-                                        radius={40000}
+                                        radius={50000}
                                         stokeWidth={0.4}
                                         strokeColor={'white'}
                                         fillColor={'rgba(245, 19, 7,0.3)'}
@@ -222,7 +222,7 @@ class MapViewScreen extends Component {
                                     return (
                                         <MapView.Circle
                                             center={LATLNG}
-                                            radius={20000}
+                                            radius={25000}
                                             stokeWidth={0}
                                             strokeColor={'white'}
                                             fillColor={'rgba(245, 19, 7,0.2)'}

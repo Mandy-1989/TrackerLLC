@@ -23,7 +23,7 @@ export const Graph = (props) =>
                 contentInset={contentInset}
                 svg={{ fill: 'grey', fontSize: 11, }}
                 numberOfTicks={3}
-                formatLabel={value => `${value.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}`}
+                formatLabel={value => parseInt(value)}
             />
             <View style={style.verticleLine}></View>
             <BarChart
