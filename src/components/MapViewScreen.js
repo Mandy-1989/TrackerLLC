@@ -20,7 +20,8 @@ class MapViewScreen extends Component {
         super(props)
 
         this.state = {
-            country: []
+            country: [],
+            usa: [],
         }
         // console.log("isFromTab:" + this.props.navigation.state.params.isFromTab)
     }
@@ -33,39 +34,20 @@ class MapViewScreen extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({
-                    country: responseJson
+                    country: responseJson,
+                    usa: this.props.usaStateList
                 })
             }
             )
-
-        // await fetch('https://corona.lmao.ninja/states', {
-        //     method: 'GET'
-        // })
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //     }
-        //     )
     }
 
-    setMarkerPosition = (item) => {
+    setMarkerPosition = (item, index) => {
         var lat = item.countryInfo.lat
         var long = item.countryInfo.long
         const LATLNG = {
             latitude: parseFloat(lat),
             longitude: parseFloat(long)
         };
-        // return (
-        //     // <Marker
-        //     //  coordinate={assetLocations}
-        //     //     image={require('../assets/images/pin.png')}
-        //     <MapView.Circle
-        //         center={assetLocations}
-        //         radius={100000}
-        //         stokeWidth={0.4}
-        //         strokeColor={'white'}
-        //         fillColor={'rgba(245, 19, 7,0.4)'}
-        //     />
-        // )
         if ((parseInt(item.cases) > 1000000 && parseInt(item.cases) < 10000000) || parseInt(item.cases) == 10000000) {
             return (
                 <MapView.Circle
@@ -157,6 +139,93 @@ class MapViewScreen extends Component {
 
     }
 
+    setMarkerPosition1 = (item, index) => {
+        var lat = item.lat
+        var long = item.long
+        const LATLNG = {
+            latitude: parseFloat(lat),
+            longitude: parseFloat(long)
+        };
+        if ((parseInt(item.totalConfirmed) > 300000 && parseInt(item.totalConfirmed) < 1000000) || parseInt(item.totalConfirmed) == 1000000) {
+            return (
+                <MapView.Circle
+                    center={LATLNG}
+                    radius={120000}
+                    stokeWidth={0.4}
+                    strokeColor={'white'}
+                    fillColor={'rgba(245, 19, 7,0.5)'}
+                />
+            )
+        } else
+            if ((parseInt(item.totalConfirmed) > 100000 && parseInt(item.totalConfirmed) < 300000) || parseInt(item.totalConfirmed) == 300000) {
+                return (
+                    <MapView.Circle
+                        center={LATLNG}
+                        radius={640000}
+                        stokeWidth={0.4}
+                        strokeColor={'white'}
+                        fillColor={'rgba(245, 19, 7,0.5)'}
+                    />
+                )
+            } else
+                if ((parseInt(item.totalConfirmed) > 50000 && parseInt(item.totalConfirmed) < 100000) || parseInt(item.totalConfirmed) == 100000) {
+                    return (
+                        <MapView.Circle
+                            center={LATLNG}
+                            radius={320000}
+                            stokeWidth={0.4}
+                            strokeColor={'white'}
+                            fillColor={'rgba(245, 19, 7,0.5)'}
+                        />
+                    )
+                } else
+                    if ((parseInt(item.totalConfirmed) > 20000 && parseInt(item.totalConfirmed) < 50000) || parseInt(item.totalConfirmed) == 50000) {
+                        return (
+                            <MapView.Circle
+                                center={LATLNG}
+                                radius={160000}
+                                stokeWidth={0.4}
+                                strokeColor={'white'}
+                                fillColor={'rgba(245, 19, 7,0.5)'}
+                            />
+                        )
+                    } else
+                        if (parseInt(item.totalConfirmed) < 20000 || parseInt(item.totalConfirmed) == 20000) {
+                            return (
+                                <MapView.Circle
+                                    center={LATLNG}
+                                    radius={80000}
+                                    stokeWidth={0.4}
+                                    strokeColor={'white'}
+                                    fillColor={'rgba(245, 19, 7,0.4)'}
+                                />
+                            )
+                        } else
+                            if (parseInt(item.totalConfirmed) < 10000 && parseInt(item.totalConfirmed) > 5000) {
+                                return (
+                                    <MapView.Circle
+                                        center={LATLNG}
+                                        radius={40000}
+                                        stokeWidth={0.4}
+                                        strokeColor={'white'}
+                                        fillColor={'rgba(245, 19, 7,0.3)'}
+                                    />
+                                )
+                            } else
+                                if (parseInt(item.totalConfirmed) == 5000 || parseInt(item.totalConfirmed) < 5000) {
+                                    return (
+                                        <MapView.Circle
+                                            center={LATLNG}
+                                            radius={20000}
+                                            stokeWidth={0}
+                                            strokeColor={'white'}
+                                            fillColor={'rgba(245, 19, 7,0.2)'}
+                                        />
+                                    )
+                                }
+
+    }
+
     render() {
         switch (this.props.isFetching) {
             case true:
@@ -167,7 +236,7 @@ class MapViewScreen extends Component {
                 if (this.props.countryList.length > 0) {
                     if (this.state.country.length == 0) {
                         this.setState({
-                            country: this.props.countryList
+                            country: this.props.countryList,
                         })
                     }
                 }
@@ -187,9 +256,11 @@ class MapViewScreen extends Component {
                             initialRegion={INITIAL_REGION}
                             onRegionChange={this.onRegionChange}
                             style={styles.map}>
-
-                            {this.state.country.map(item => (
-                                this.setMarkerPosition(item)
+                            {this.state.country.map((item, index) => (
+                                this.setMarkerPosition(item, index)
+                            ))}
+                            {this.state.usa.map((item) => (
+                                this.setMarkerPosition1(item)
                             ))}
                         </MapView>
                     </SafeAreaView>
@@ -200,8 +271,9 @@ class MapViewScreen extends Component {
 
 function mapStateToProps(state) {
     const { isFetching, countryList } = state.countryList;
+    const { usaStateList } = state.usaStateList
     return {
-        isFetching, countryList
+        isFetching, countryList, usaStateList
     }
 }
 

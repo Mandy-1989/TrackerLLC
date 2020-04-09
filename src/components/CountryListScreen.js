@@ -37,7 +37,7 @@ class CountryListScreen extends Component {
             cases: '',
             recovered: '',
             deaths: '',
-
+            disabled: false
         }
         covidName = this.props.navigation.getParam('name')
         usacountry = this.props.navigation.getParam('item')
@@ -50,16 +50,19 @@ class CountryListScreen extends Component {
     async componentDidMount() {
         {
             usacountry ?
-                this.setState({ selectedData: this.props.usaStateList, searchData: this.props.usaStateList, countryName: 'komal' })
+                this.setState({ selectedData: this.props.usaStateList, searchData: this.props.usaStateList, countryName: this.props.usaStateList[0].displayName, index: 0, disabled: true })
                 :
                 this.setState({ selectedData: this.props.countryList, searchData: this.props.countryList, countryName: this.props.countryList[0].country })
         }
-        this.countryGraph(this.props.countryList[0]);
+        usacountry ?
+            this.countryGraph(this.props.usaStateList[0])
+            :
+            this.countryGraph(this.props.countryList[0])
     }
 
     renderCountryItem = ({ item, index }) => {
         let count = covidName === 'CONFIRMED CASES' ? JSON.stringify(item.cases) : (covidName === 'RECOVERED CASES' ? JSON.stringify(item.recovered) : JSON.stringify(item.deaths))
-        let countState = JSON.stringify(item.cases)
+        let countState = JSON.stringify(item.totalConfirmed)
 
         return (
             <TouchableOpacity onPress={() => { this.countryGraph(item, index) }}>
@@ -79,9 +82,9 @@ class CountryListScreen extends Component {
                         :
                         <View style={{ flex: 1 }}>
                             <View style={{ flexDirection: 'row', marginHorizontal: 10, paddingVertical: 20 }}>
-                                <Text style={[styles.textStyleTwo, { flex: 1 }]}>{item.state}</Text>
+                                <Text style={[styles.textStyleTwo, { flex: 1 }]}>{item.displayName}</Text>
                                 <View>
-                                    <Text style={[styles.textStyle, { flex: 1, color: colors.color_2, alignItems: 'flex-end' }]}>{countState.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                                    <Text style={[styles.textStyle, { flex: 1, color: colors.color_2, alignItems: 'flex-end' }]}>{countState}</Text>
                                 </View>
                             </View>
                         </View>
@@ -99,28 +102,34 @@ class CountryListScreen extends Component {
             deaths: item.deaths
         })
 
-        fetch('https://corona.lmao.ninja/v2/historical/' + item.country, {
-            method: 'GET'
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                var response = responseJson.timeline;
-                covidName === 'CONFIRMED CASES' ?
-                    this.setState({
-                        data: [0, response.cases[DATE.ten], response.cases[DATE.nine], response.cases[DATE.eightth], response.cases[DATE.seventh], response.cases[DATE.sixth], response.cases[DATE.fifth], response.cases[DATE.fourth], response.cases[DATE.third], response.cases[DATE.second], response.cases[DATE.first], 0],
-                    })
-                    : (covidName === 'RECOVERED CASES' ?
-                        this.setState({
-                            data: [0, response.recovered[DATE.ten], response.recovered[DATE.nine], response.recovered[DATE.eightth], response.recovered[DATE.seventh], response.recovered[DATE.sixth], response.recovered[DATE.fifth], response.recovered[DATE.fourth], response.recovered[DATE.third], response.recovered[DATE.second], response.recovered[DATE.first], 0],
-                        })
-                        :
-                        this.setState({
-                            data: [0, response.deaths[DATE.ten], response.deaths[DATE.nine], response.deaths[DATE.eightth], response.deaths[DATE.seventh], response.deaths[DATE.sixth], response.deaths[DATE.fifth], response.deaths[DATE.fourth], response.deaths[DATE.third], response.deaths[DATE.second], response.deaths[DATE.first], 0],
-                        })
-                    )
+        usacountry ?
+            this.setState({
+                countryName: item.displayName,
+                cases: item.totalConfirmed,
+                recovered: item.totalRecovered,
+                deaths: item.totalDeaths
             })
-
-
+            :
+            fetch('https://corona.lmao.ninja/v2/historical/' + item.country, {
+                method: 'GET'
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    var response = responseJson.timeline;
+                    covidName === 'CONFIRMED CASES' ?
+                        this.setState({
+                            data: [0, response.cases[DATE.ten], response.cases[DATE.nine], response.cases[DATE.eightth], response.cases[DATE.seventh], response.cases[DATE.sixth], response.cases[DATE.fifth], response.cases[DATE.fourth], response.cases[DATE.third], response.cases[DATE.second], response.cases[DATE.first], 0],
+                        })
+                        : (covidName === 'RECOVERED CASES' ?
+                            this.setState({
+                                data: [0, response.recovered[DATE.ten], response.recovered[DATE.nine], response.recovered[DATE.eightth], response.recovered[DATE.seventh], response.recovered[DATE.sixth], response.recovered[DATE.fifth], response.recovered[DATE.fourth], response.recovered[DATE.third], response.recovered[DATE.second], response.recovered[DATE.first], 0],
+                            })
+                            :
+                            this.setState({
+                                data: [0, response.deaths[DATE.ten], response.deaths[DATE.nine], response.deaths[DATE.eightth], response.deaths[DATE.seventh], response.deaths[DATE.sixth], response.deaths[DATE.fifth], response.deaths[DATE.fourth], response.deaths[DATE.third], response.deaths[DATE.second], response.deaths[DATE.first], 0],
+                            })
+                        )
+                })
     }
 
     renderSeparator = () => (
@@ -183,15 +192,25 @@ class CountryListScreen extends Component {
                         <FlatList
                             keyExtractor={(item, index) => item.country}
                             data={selectedData.length !== 0 ? selectedData : null}
-                            renderItem={(item, index) => this.renderCountryItem(item, index)}
+                            renderItem={(index) => this.renderCountryItem(index)}
                             ItemSeparatorComponent={this.renderSeparator}
                         />
                     </View>
-                    {usacountry ? null :
-                        <View style={{ height: window.height / 2, backgroundColor: 'white', }}>
 
-                            <Text style={styles.countryName}>{this.state.countryName}</Text>
+                    <View style={{ height: window.height / 2, backgroundColor: 'white', }}>
 
+                        <Text style={styles.countryName}>{this.state.countryName}</Text>
+                        {usacountry ?
+                            <View style={{ height: 220, marginTop: 10 }}>
+                                {this.state.index == 0 &&
+                                    <Graph1
+                                        cases={this.state.cases}
+                                        recovered={this.state.recovered}
+                                        deaths={this.state.deaths}
+                                    />
+                                }
+                            </View>
+                            :
                             <View style={{ height: 220, marginTop: 10 }}>
                                 {this.state.index == 0 &&
                                     <Graph
@@ -207,20 +226,21 @@ class CountryListScreen extends Component {
                                     />
                                 }
                             </View>
-                            <View style={styles.greyLine}></View>
-                            <ButtonGroup
-                                innerBorderStyle={{ width: 20, color: 'white' }}
-                                onPress={this.updateIndex}
-                                selectedIndex={this.state.index}
-                                buttons={['Daily Increase', 'Total Cases']}
-                                textStyle={styles.textStyle}
-                                containerStyle={styles.containerStyle}
-                                selectedButtonStyle={{ backgroundColor: Colors.color_9, height: 25, width: 85, }}
-                                selectedTextStyle={{ color: 'black', fontSize: 11 }}
-                            />
-                        </View>
+                        }
+                        <View style={styles.greyLine}></View>
+                        <ButtonGroup
+                            disabled={this.state.disabled}
+                            innerBorderStyle={{ width: 20, color: 'white' }}
+                            onPress={this.updateIndex}
+                            selectedIndex={this.state.index}
+                            buttons={usacountry ? ['Total Cases'] : ['Daily Increase', 'Total Cases']}
+                            textStyle={styles.textStyle}
+                            containerStyle={styles.containerStyle}
+                            selectedButtonStyle={{ backgroundColor: Colors.color_9, height: 25, width: 85, }}
+                            selectedTextStyle={{ color: 'black', fontSize: 11 }}
+                        />
+                    </View>
 
-                    }
                 </View>
             </SafeAreaView>
         )
@@ -243,6 +263,12 @@ const styles = StyleSheet.create({
     textStyleTwo: {
         fontSize: 16,
         fontFamily: 'FiraSans-Bold'
+    },
+    graphText: {
+        fontSize: 20,
+        alignSelf: 'center',
+        paddingTop: 100,
+
     },
     imageStyle: {
         backgroundColor: StyleConfig.COLOR.GREY_DIM,

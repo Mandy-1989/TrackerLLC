@@ -132,7 +132,6 @@ function mapStateToProps(state) {
     const { isFetching, covid } = state.covid
     const { countryInfo } = state.country
     const { usaStateList } = state.usaStateList;
-
     return {
         isFetching, covid, countryInfo, usaStateList
     }

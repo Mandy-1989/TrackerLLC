@@ -4,8 +4,8 @@ import axios from 'axios';
 export function fetchUsaStateData() {
     return (dispatch) => {
         dispatch(getUsaStateData())
-        axios.get('https://corona.lmao.ninja/states').then(response => {
-            return (dispatch(getUsaStateDataSuccess(response.data)))
+        axios.get('https://bing.com/covid/data').then(response => {
+            return (dispatch(getUsaStateDataSuccess(response.data.areas[0].areas)))
         }).catch(err => dispatch(getUsaStateDataFailure(err)))
     }
 }
