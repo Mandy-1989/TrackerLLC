@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, Text, TouchableOpacity, ScrollView, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { View, SafeAreaView, Text, TouchableOpacity, ScrollView, ActivityIndicator, StyleSheet, Image, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchCovid_19List } from '../redux/actions/CovidInfo';
@@ -73,7 +73,7 @@ class Dashboard extends Component {
                                 <LinearGradient start={{ x: 0, y: 0 }}
                                     end={{ x: 1, y: 0 }}
                                     colors={[colors.color_7, colors.color_8]}
-                                    style={[styles.infoCard, { paddingVertical: 5 }]} >
+                                    style={[styles.infoCard, { paddingVertical: 5, height:  Platform.OS === 'ios' ?  StyleConfig.countPixelRatio(90) : null  }]} >
                                     <TouchableOpacity onPress={() => this.onUSAPressed()}>
                                         <Text style={styles.txtCountry}>{string.str_unitedStatus}</Text>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     firstContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: Platform.OS === 'ios' ? StyleConfig.countPixelRatio(40) : StyleConfig.countPixelRatio(20),
+        marginTop: Platform.OS === 'ios' ? StyleConfig.countPixelRatio(30) : StyleConfig.countPixelRatio(20),
         marginBottom: StyleConfig.countPixelRatio(15)
 
     },
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 10,
         flex: 0.3,
+        height:  Platform.OS === 'ios' ?  StyleConfig.countPixelRatio(110) : null,
         shadowColor: '#939393',
         shadowOffset: {
             width: 0,

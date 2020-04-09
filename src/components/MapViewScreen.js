@@ -8,12 +8,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import StyleConfig from '../assets/StyleConfig'
 import { mapStyle } from '../constants/MapStyle'
 
-const INITIAL_REGION = {
-    latitude: 52.5,
-    longitude: 19.2,
-    latitudeDelta: 8.5,
-    longitudeDelta: 8.5
-};
+// const INITIAL_REGION = {
+//     latitude: 52.5,
+//     longitude: 19.2,
+//     latitudeDelta: 8.5,
+//     longitudeDelta: 8.5
+// };
 class MapViewScreen extends Component {
 
     constructor(props) {
@@ -22,9 +22,15 @@ class MapViewScreen extends Component {
         this.state = {
             country: [],
             usa: [],
+            region: {
+                latitude: 23.0497,
+                longitude: 72.5117,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            }
         }
-        // console.log("isFromTab:" + this.props.navigation.state.params.isFromTab)
     }
+
 
     async componentDidMount() {
         this.props.fetchCountryList();
@@ -253,7 +259,7 @@ class MapViewScreen extends Component {
                             zoomControlEnabled={true}
                             isAccessibilityElement={true}
                             customMapStyle={mapStyle}
-                            initialRegion={INITIAL_REGION}
+                            initialRegion={this.state.region}
                             onRegionChange={this.onRegionChange}
                             style={styles.map}>
                             {this.state.country.map((item, index) => (

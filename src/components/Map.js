@@ -21,6 +21,10 @@ export default class Map extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.fetchCountryList();
+    }
+
     setMarkerPosition = (item) => {
         const assetLocations = {
             latitude: parseFloat(item.lat),

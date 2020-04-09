@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
 
 })
 
+
 function mapStateToProps(state) {
     const { isFetching, countryList } = state.countryList;
     const { usaStateList } = state.usaStateList;
