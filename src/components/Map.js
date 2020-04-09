@@ -23,7 +23,6 @@ class MapViewScreen extends Component {
         this.state = {
             country: []
         }
-        // console.log("isFromTab:" + this.props.navigation.state.params.isFromTab)
     }
 
     componentDidMount() {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity,Platform } from 'react-native';
 import Dashboard from "./Dashboard";
 import MapViewScreen from "./MapViewScreen";
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,6 +9,8 @@ import News from './News';
 import FAQ from './FAQ';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import StyleConfig from '../assets/StyleConfig'
+
 function MyTabBar({ state, descriptors, navigation }) {
     return (
         <View style={{ flexDirection: 'row' }}>
@@ -41,7 +43,7 @@ function MyTabBar({ state, descriptors, navigation }) {
                         accessibilityLabel={options.tabBarAccessibilityLabel}
                         testID={options.tabBarTestID}
                         onPress={onPress}
-                        style={{ flex: 1, paddingVertical: 10 }}>
+                        style={{ flex: 1, paddingVertical: StyleConfig.iPhoneX ? 20 : 10 }}>
                         {
                             icon == 'questioncircleo' ?
                                 <AntDesign style={{ alignSelf: 'center' }} name={icon} size={24} color={isFocused ? '#673ab7' : '#222'} /> :

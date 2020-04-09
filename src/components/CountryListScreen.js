@@ -50,11 +50,11 @@ class CountryListScreen extends Component {
     async componentDidMount() {
         {
             usacountry ?
-                this.setState({ selectedData: this.props.usaStateList, searchData: this.props.usaStateList })
+                this.setState({ selectedData: this.props.usaStateList, searchData: this.props.usaStateList  ,countryName : 'komal'})
                 :
-                this.setState({ selectedData: this.props.countryList, searchData: this.props.countryList })
+                this.setState({ selectedData: this.props.countryList, searchData: this.props.countryList,countryName : this.props.countryList[0].country })
         }
-
+        this.countryGraph (this.props.countryList[0]);
     }
 
     renderCountryItem = ({ item, index }) => {
@@ -90,7 +90,7 @@ class CountryListScreen extends Component {
         )
     }
 
-    async  countryGraph(item, index) {
+    async  countryGraph(item, index ) {
         this.setState({
             countryName: item.country
         })
@@ -101,7 +101,6 @@ class CountryListScreen extends Component {
                 .then((response) => response.json())
                 .then((responseJson) => {
                     responseJson.map((item) => {
-                        console.log("Response", item.cases)
                         this.setState({
                             data: [item.cases]
                         })
@@ -128,9 +127,6 @@ class CountryListScreen extends Component {
                             })
                         )
                 })
-
-
-
     }
 
     renderSeparator = () => (
@@ -170,8 +166,8 @@ class CountryListScreen extends Component {
                     <SafeAreaView>
                         <View style={{ flex: 1, backgroundColor: 'white' }}>
                             <View style={{ height: window.height / 2 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }} >
-                                    <TouchableOpacity style={{ padding: 10, maringTop: StyleConfig.countPixelRatio(20) }} onPress={() => this.props.navigation.goBack()}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center',marginTop: Platform.OS === 'ios' ?  StyleConfig.countPixelRatio(10) : null }} >
+                                    <TouchableOpacity style={{ padding: StyleConfig.countPixelRatio(10), maringTop: StyleConfig.countPixelRatio(25) }} onPress={() => this.props.navigation.goBack()}>
                                         <Ionicons name={"ios-arrow-back"} size={25} color={'black'} />
                                     </TouchableOpacity>
 
@@ -195,14 +191,14 @@ class CountryListScreen extends Component {
                                 />
                             </View>
                             {usacountry ? null :
-                                <View style={{ height: window.height / 2, }}>
+                                <View style={{ height: window.height / 2, marginTop : Platform.OS === 'ios' ?  StyleConfig.countPixelRatio(15) : null }}>
 
                                     <Text style={styles.countryName}>{this.state.countryName}</Text>
 
                                     <View style={{ height: 220 }}>
                                         <Graph
                                             data={this.state.data}
-                                            formatLabel={(value, index) => this.state.data2[index]}
+                                            formatLabel={(value, index) => this.state.data2[index]}                                    
                                         />
                                     </View>
                                     <View style={styles.greyLine}></View>
@@ -217,7 +213,6 @@ class CountryListScreen extends Component {
                                         selectedTextStyle={{ color: 'black', fontSize: 11 }}
                                     />
                                 </View>
-
                             }
                         </View>
                     </SafeAreaView>

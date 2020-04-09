@@ -9,25 +9,51 @@ import StyleConfig from '../assets/StyleConfig'
 import { mapStyle } from '../constants/MapStyle'
 import MapViewCluster from 'react-native-map-clustering'
 
-const INITIAL_REGION = {
-    latitude: 52.5,
-    longitude: 19.2,
-    latitudeDelta: 8.5,
-    longitudeDelta: 8.5
-};
+// const INITIAL_REGION = {
+//     latitude: 52.5,
+//     longitude: 19.2,
+//     latitudeDelta: 8.5,
+//     longitudeDelta: 8.5
+// };
 class MapViewScreen extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            country: []
+            country: [],
+            region:{
+                latitude: 23.0497,
+                longitude: 72.5117,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            }
         }
-        // console.log("isFromTab:" + this.props.navigation.state.params.isFromTab)
     }
 
-    componentDidMount() {
+   async componentDidMount() {
         this.props.fetchCountryList();
+
+     await  navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                console.log({po})
+                const lat = position.coords.latitude; //42.300170;
+                const long = position.coords.longitude; //-71.375310;
+                await this.setState({
+                    region: {
+                        latitude: lat,
+                        longitude: long,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    },
+                });
+
+                // await this.getLocationData(lat, long);
+                // this.forceUpdate()
+            },
+            (error) => Alert.alert(error.message),
+            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+        );
     }
 
     setMarkerPosition = (item) => {
@@ -77,7 +103,7 @@ class MapViewScreen extends Component {
                             zoomControlEnabled={true}
                             isAccessibilityElement={true}
                             customMapStyle={mapStyle}
-                            initialRegion={INITIAL_REGION}
+                            initialRegion={this.state.region}
                             onRegionChange={this.onRegionChange}
                             style={styles.map}>
 
