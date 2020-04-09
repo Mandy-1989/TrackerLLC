@@ -9,9 +9,9 @@ export const Graph1 = (props) =>
                 <Text style={[style.textStyle, { color: 'rgba(29, 152, 173, 0.7)' }]}>{props.deaths} {'\n'} <Text>Deaths</Text> </Text>
             </View>
             <View style={style.totalCases}>
-                <Text style={[style.textStyle, { color: 'rgba(145, 51, 204, 0.7)' }]}>{props.cases} {'\n'} <Text>Total</Text></Text>
+                <Text style={[style.textStyle, { color: 'rgba(145, 51, 204, 0.7)' }]}>{props.cases} {'\n'} <Text>Total </Text></Text>
                 <View style={style.dailyCases}>
-                    <Text style={[style.textStyle, { color: 'rgba(240, 62, 139, 1)' }]}>{props.recovered} {'\n'} <Text style={{ color: 'rgba(242, 133, 180, 1)' }}>Recovered</Text></Text>
+                    <Text style={[style.textStyle, { color: 'rgba(240, 62, 139, 1)' }]}>{props.recovered} {'\n'} <Text style={{ color: 'rgba(242, 133, 180, 1)' }}>Recovered </Text></Text>
                 </View>
 
             </View>
@@ -34,7 +34,8 @@ const style = StyleSheet.create({
         marginTop: -15,
         textAlign: 'right',
         flex: 1,
-        paddingRight: 2,
+        paddingRight: 5,
+        lineHeight: 15
     },
     horizontalLine: {
         width: Dimensions.get('window').width - 50,
